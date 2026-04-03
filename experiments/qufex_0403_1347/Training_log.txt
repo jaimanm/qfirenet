@@ -1,0 +1,3 @@
+Config: qufex
+Model: qufex_unet | Mode: 5 (swir_aerosol)
+Output: experiments\qufex_0403_1347
