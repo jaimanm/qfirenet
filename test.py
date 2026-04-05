@@ -108,6 +108,32 @@ def process_scene(scene_id, model, config, output_dir, device):
     save_path = os.path.join(output_dir, f"scene{scene_id}_map.png")
     plot_scene_map(reconstructed_rgb, reconstructed_pred, reconstructed_label, save_path)
 
+    # Calculate metrics
+    pred_flat = reconstructed_pred.reshape(-1)
+    label_flat = reconstructed_label.reshape(-1)
+    num_classes = config.get('n_classes', 2)
+
+    TP, FP, TN, FN, n_valid = eval_image(pred_flat, label_flat, num_classes)
+    
+    # Overall accuracy
+    metrics = {'OA': np.sum(TP) / n_valid}
+    epsilon=1e-14
+
+    # Per-class metrics
+    for i in range(num_classes):
+        P = TP[i] / (TP[i] + FP[i] + epsilon)
+        R = TP[i] / (TP[i] + FN[i] + epsilon)
+        F1 = 2.0 * P * R / (P + R + epsilon)
+        IoU = TP[i] / (TP[i] + FP[i] + FN[i] + epsilon)
+        metrics[f'class{i}_P'] = P.item()
+        metrics[f'class{i}_R'] = R.item()
+        metrics[f'class{i}_F1'] = F1.item()
+        metrics[f'class{i}_IoU'] = IoU.item()
+
+    metrics['mF1'] = np.mean([metrics[f'class{i}_F1'] for i in range(num_classes)])
+    metrics['mIoU'] = np.mean([metrics[f'class{i}_IoU'] for i in range(num_classes)])
+    return metrics
+
 
 def main():
     parser = argparse.ArgumentParser(description='Run inference for wildfire detection')
@@ -140,10 +166,12 @@ def main():
     print(f"Checkpoint: {args.restore_from}")
     print(f"Output: {output_dir}")
 
-    for scene_id in [1, 2, 3, 4]:
-        process_scene(scene_id, model, config, output_dir, device)
+    # Only test scene 4 to save memory/time
+    scene_id = 4
+    full_metrics = process_scene(scene_id, model, config, output_dir, device)
 
     print(f"\nDone. Results saved to {output_dir}")
+    print(f"METRICS (Scene {scene_id}): {full_metrics}")
 
 
 if __name__ == '__main__':
