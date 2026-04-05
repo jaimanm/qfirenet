@@ -6,6 +6,7 @@ mode: 5                    # swir_aerosol
 n_classes: 2
 
 # Training
+augment: true
 epochs: 5
 batch_size: 16
 test_batch_size: 50

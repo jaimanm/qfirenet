@@ -75,10 +75,11 @@ def create_rgb_swir_nbr_ndvi_aerosol_composite(patch_data):
 # Dataset class for Sen2Fire dataset
 class Sen2FireDataSet(data.Dataset):
     # Initialization
-    def __init__(self, root, list_path, max_iters=None, mode=5):
+    def __init__(self, root, list_path, max_iters=None, mode=5, augment=False):
         self.root = root
         self.list_path = list_path
         self.mode = mode
+        self.augment = augment
         self.img_ids = [i_id.strip() for i_id in open(list_path)]
 
         self.files = []
@@ -102,7 +103,9 @@ class Sen2FireDataSet(data.Dataset):
         label = np.load(datafiles["patch"])['label']
         name = datafiles["name"]
         # Process data based on the selected mode
-        if self.mode == 0:            
+        if self.mode == 0:
+            if self.augment:
+                image, label = self._augment(image, label)
             return image, label, np.array(image.shape), name
         else:
             data = np.concatenate([image, aerosol[np.newaxis,...]], axis=0)
@@ -128,8 +131,30 @@ class Sen2FireDataSet(data.Dataset):
                 data = create_rgb_swir_nbr_ndvi_composite(data)
             elif self.mode == 11:      
                 data = create_rgb_swir_nbr_ndvi_aerosol_composite(data)
+        if self.augment:
+            data, label = self._augment(data, label)
+
         return data, label, np.array(data.shape), name
-    
+
+    def _augment(self, data, label):
+        # Random horizontal flip (50% chance) — mirrors along width axis
+        if np.random.random() < 0.5:
+            data = np.flip(data, axis=-1).copy()
+            label = np.flip(label, axis=-1).copy()
+
+        # Random vertical flip (50% chance) — mirrors along height axis
+        if np.random.random() < 0.5:
+            data = np.flip(data, axis=-2).copy()
+            label = np.flip(label, axis=-2).copy()
+
+        # Random 90° rotation — 0°, 90°, 180°, or 270°
+        k = np.random.randint(0, 4)
+        if k > 0:
+            data = np.rot90(data, k=k, axes=(-2, -1)).copy()
+            label = np.rot90(label, k=k).copy()
+
+        return data, label
+
     # Compute maximum values across the dataset
     def compute_max_values(self):
         # Initialize max values array
