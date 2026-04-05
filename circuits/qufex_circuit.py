@@ -52,7 +52,7 @@ def create_qufex_circuit(config):
         qml.CNOT(wires=[n_qubits - 1, 0])  # close the ring
 
         # ---- Pauli-Z measurements ----
-        return [qml.expval(qml.PauliZ(i)) for i in range(n_qubits)]
+        return [qml.expval(qml.PauliZ(i)) for i in range(n_qubits)] 
 
     weight_shapes = {
         "weights_u1": (n_layers, half, 2),  # θ for U1 qubits (RY + RZ per layer)

@@ -71,7 +71,9 @@ class QuFeXBottleneck(nn.Module):
         # --- Quantum layer ---
         config = {"n_qubits": n_qubits, "n_layers": n_layers, "circuit": "qufex_circuit"}
         qnode, weight_shapes = get_circuit(config)
-        self.quantum_layer = qml.qnn.TorchLayer(qnode, weight_shapes)
+        self.qnode = qnode
+        self.weights_u1 = nn.Parameter(torch.randn(*weight_shapes['weights_u1']) * 0.01)
+        self.weights_u2 = nn.Parameter(torch.randn(*weight_shapes['weights_u2']) * 0.01)
  
         # --- Post-quantum: channel restoration ---
         self.post_conv = nn.Sequential(
@@ -94,8 +96,9 @@ class QuFeXBottleneck(nn.Module):
         x_q = preprocess_quantum_input(x_q)
  
         # 4. Run QuFeX circuit on each spatial location
-        outputs = [self.quantum_layer(x_q[i]).unsqueeze(0) for i in range(B * H * W)]
-        x_q = torch.cat(outputs, dim=0)  # [B·H·W, n_qubits]
+        x_q_cpu = x_q.detach().cpu()
+        result = self.qnode(x_q_cpu.T, self.weights_u1.cpu(), self.weights_u2.cpu())
+        x_q = torch.stack(result, dim=1).to(x.device).float()
  
         # 5. Restore spatial layout: [B·H·W, n_qubits] → [B, n_qubits, H, W]
         x_q = x_q.reshape(B, H, W, self.n_qubits).permute(0, 3, 1, 2)
