@@ -15,7 +15,6 @@ export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
 WORKDIR="$HOME/scratch/wildfires"
 cd "$WORKDIR"
-source venv/bin/activate
 
 # Pass all command-line arguments through to train.py
 # Usage: sbatch scripts/submit_train.sh --config configs/classical_baseline.yaml
