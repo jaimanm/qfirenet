@@ -67,3 +67,16 @@ def plot_scene_map(reconstructed_rgb, reconstructed_pred, reconstructed_label, s
     plt.tight_layout()
     plt.savefig(save_path, bbox_inches='tight', dpi=300)
     plt.close(fig)
+
+
+def plot_heatmap(prob_map, title, save_path):
+    """Plot a continuous fire probability map with colorbar."""
+    fig, ax = plt.subplots(figsize=(6, 5))
+    im = ax.imshow(prob_map, cmap='jet', vmin=0, vmax=1)
+    ax.axis('off')
+    ax.set_title(title, fontsize=12)
+    cbar = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+    cbar.set_label('fire probability', fontsize=10)
+    plt.tight_layout()
+    plt.savefig(save_path, bbox_inches='tight', dpi=300)
+    plt.close(fig)
