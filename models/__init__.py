@@ -1,9 +1,13 @@
 from models.unet import ClassicalUNet
+from models.compact_unet import CompactUNet
 from models.quantum_unet import QuantumUNet
+from models.compact_quantum_unet import CompactQuantumUNet
 
 MODEL_REGISTRY = {
     'classical_unet': ClassicalUNet,
+    'compact_unet': CompactUNet,
     'quantum_unet': QuantumUNet,
+    'compact_quantum_unet': CompactQuantumUNet,
 }
 
 # Spectral band mode -> number of input channels
