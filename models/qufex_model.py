@@ -111,7 +111,7 @@ class QuFeXBottleneck(nn.Module):
 # Qu-Net  (QuFeX at the bottleneck of a classical U-Net)
 # ---------------------------------------------------------------------------
  
-class QuFeXUNet(nn.Module):
+class QuNet(nn.Module):
     """Hybrid quantum-classical U-Net using QuFeX at the bottleneck.
  
     Implements Qu-Net from Jain & Kalev (2025). The encoder/decoder and skip

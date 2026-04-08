@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+venv/
+.env
+
+# Model checkpoints
+*.pth
+
+# Jupyter notebooks (except shared ones in notebooks/)
+*.ipynb
+!notebooks/*.ipynb
+
+# OS
+.DS_Store
+Thumbs.db
+
+# SLURM logs (kept in experiments/ but not tracked)
+experiments/slurm-*.out
