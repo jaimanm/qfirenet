@@ -7,8 +7,8 @@ mode: 5 # swir_aerosol
 n_classes: 2
 
 # Quantum bottleneck
-n_qubits: 8 # must be even (U1/U2 split); paper configs: 8(1) or 4(2)
-n_layers: 2 # trainable RY/RZ rotation layers inside QuFeX
+n_qubits: 4 # Qu-Net 4(2) — the config the paper actually ran due to compute limits
+n_layers: 2 # trainable rotation layers inside QuFeX
 circuit: qufex_circuit
 
 # Training

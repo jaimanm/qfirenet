@@ -96,15 +96,17 @@ class QuFeXBottleneck(nn.Module):
         x_q = preprocess_quantum_input(x_q)
  
         # 4. Run QuFeX circuit on each spatial location
-        x_q_cpu = x_q.detach().cpu()
-        result = self.qnode(x_q_cpu.T, self.weights_u1.cpu(), self.weights_u2.cpu())
+        # .cpu() needed as default.qubit runs on CPU; .detach() removed so
+        # gradients flow back through pre_conv (paper trains end-to-end).
+        result = self.qnode(x_q.cpu().T, self.weights_u1.cpu(), self.weights_u2.cpu())
         x_q = torch.stack(result, dim=1).to(x.device).float()
  
         # 5. Restore spatial layout: [B·H·W, n_qubits] → [B, n_qubits, H, W]
         x_q = x_q.reshape(B, H, W, self.n_qubits).permute(0, 3, 1, 2)
  
-        # 6. Restore channel count: [B, n_qubits, H, W] → [B, C, H, W]
-        return self.post_conv(x_q)
+        # 6. Restore channel count and add residual connection
+        # Paper: "y = Q(x) + x where Q(x) represents the output of the quantum layer"
+        return self.post_conv(x_q) + x
  
  
 # ---------------------------------------------------------------------------
