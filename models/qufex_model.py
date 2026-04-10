@@ -26,13 +26,13 @@ def preprocess_quantum_input(x):
  
 class QuFeXBottleneck(nn.Module):
     """QuFeX feature-extraction module placed at the U-Net bottleneck.
- 
+
     Replaces the old flatten → fc1 → AmplitudeEmbedding → fc2 → unflatten
     chain with the architecture described in Jain & Kalev (2025):
- 
+
         [B, C, H, W]
              │
-        1×1 Conv  →  compress C channels down to n_qubits
+        1×1 Convs →  staged compression: C → C//4 → n_qubits channels
         BN + ReLU
              │
         [B·H·W, n_qubits]  ←  reshape: process every spatial location
@@ -47,68 +47,82 @@ class QuFeXBottleneck(nn.Module):
              │
         1×1 Conv  →  restore C channels
         BN + ReLU
- 
+             │
+        + residual (input x) ← bypass if quantum circuit learns nothing useful
+
     The 1×1 convolutions avoid the information bottleneck caused by the
     old linear projection to 2^n_qubits values (AmplitudeEmbedding requires
     an input vector of exactly 2^n entries, which forced an expensive
     flattening of the entire spatial feature map into a single vector per
     sample). Here each spatial location is encoded independently, using
     only n_qubits features — one per qubit — collected across channels.
+
+    The staged compression (C → C//4 → n_qubits) preserves more of the
+    encoder's learned representation compared to a single aggressive squeeze.
+    The residual connection stabilises training by providing a gradient bypass
+    if the quantum layer learns something unhelpful early on.
     """
- 
+
     def __init__(self, in_channels: int, n_qubits: int = 8, n_layers: int = 2):
         super().__init__()
         self.n_qubits = n_qubits
         self.in_channels = in_channels
- 
-        # --- Pre-quantum: channel compression ---
+
+        # --- Pre-quantum: staged channel compression ---
         self.pre_conv = nn.Sequential(
-            nn.Conv2d(in_channels, n_qubits, kernel_size=1, bias=False),
+            nn.Conv2d(in_channels, in_channels // 4, kernel_size=1, bias=False),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(in_channels // 4, n_qubits, kernel_size=1, bias=False),
             nn.BatchNorm2d(n_qubits),
             nn.ReLU(inplace=True),
         )
- 
+
         # --- Quantum layer ---
         config = {"n_qubits": n_qubits, "n_layers": n_layers, "circuit": "qufex_circuit"}
         qnode, weight_shapes = get_circuit(config)
         self.quantum_layer = qml.qnn.TorchLayer(qnode, weight_shapes)
- 
+
         # --- Post-quantum: channel restoration ---
         self.post_conv = nn.Sequential(
             nn.Conv2d(n_qubits, in_channels, kernel_size=1, bias=False),
             nn.BatchNorm2d(in_channels),
             nn.ReLU(inplace=True),
         )
- 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+
+    def _quantum_forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Compress → quantum → restore, returning [B, C, H, W]."""
         B, C, H, W = x.shape
- 
-        # 1. Compress channels: [B, C, H, W] → [B, n_qubits, H, W]
+
+        # 1. Staged channel compression: [B, C, H, W] → [B, n_qubits, H, W]
         x_q = self.pre_conv(x)
- 
+
         # 2. Flatten spatial dims for per-location quantum processing:
         #    [B, n_qubits, H, W] → [B·H·W, n_qubits]
         x_q = x_q.permute(0, 2, 3, 1).reshape(B * H * W, self.n_qubits)
- 
+
         # 3. Normalise to angle range [-π, π]
         x_q = preprocess_quantum_input(x_q)
- 
+
         # 4. Run QuFeX circuit on each spatial location
         outputs = [self.quantum_layer(x_q[i]).unsqueeze(0) for i in range(B * H * W)]
         x_q = torch.cat(outputs, dim=0)  # [B·H·W, n_qubits]
- 
+
         # 5. Restore spatial layout: [B·H·W, n_qubits] → [B, n_qubits, H, W]
         x_q = x_q.reshape(B, H, W, self.n_qubits).permute(0, 3, 1, 2)
- 
+
         # 6. Restore channel count: [B, n_qubits, H, W] → [B, C, H, W]
         return self.post_conv(x_q)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # Residual connection: bypass if quantum circuit learns nothing useful
+        return x + self._quantum_forward(x)
  
  
 # ---------------------------------------------------------------------------
 # Qu-Net  (QuFeX at the bottleneck of a classical U-Net)
 # ---------------------------------------------------------------------------
  
-class QuFeXUNet(nn.Module):
+class QuNet(nn.Module):
     """Hybrid quantum-classical U-Net using QuFeX at the bottleneck.
  
     Implements Qu-Net from Jain & Kalev (2025). The encoder/decoder and skip
