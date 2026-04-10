@@ -68,11 +68,21 @@ class QuFeXBottleneck(nn.Module):
         self.n_qubits = n_qubits
         self.in_channels = in_channels
 
-        # --- Pre-quantum: staged channel compression ---
+        mid = max(in_channels // 4, n_qubits)   # safe intermediate width
+
+        # --- Pre-quantum: staged compression (3×3 → 1×1 → 1×1) ---
         self.pre_conv = nn.Sequential(
-            nn.Conv2d(in_channels, in_channels // 4, kernel_size=1, bias=False),
+            # Step 1 — spatial context: C → C//2
+            nn.Conv2d(in_channels, in_channels // 2, kernel_size=3,
+                    padding=1, bias=False),
+            nn.BatchNorm2d(in_channels // 2),
             nn.ReLU(inplace=True),
-            nn.Conv2d(in_channels // 4, n_qubits, kernel_size=1, bias=False),
+            # Step 2 — channel squeeze: C//2 → C//4
+            nn.Conv2d(in_channels // 2, mid, kernel_size=1, bias=False),
+            nn.BatchNorm2d(mid),
+            nn.ReLU(inplace=True),
+            # Step 3 — final squeeze: C//4 → n_qubits
+            nn.Conv2d(mid, n_qubits, kernel_size=1, bias=False),
             nn.BatchNorm2d(n_qubits),
             nn.ReLU(inplace=True),
         )
@@ -80,11 +90,18 @@ class QuFeXBottleneck(nn.Module):
         # --- Quantum layer ---
         config = {"n_qubits": n_qubits, "n_layers": n_layers, "circuit": "qufex_circuit"}
         qnode, weight_shapes = get_circuit(config)
-        self.quantum_layer = qml.qnn.TorchLayer(qnode, weight_shapes)
-
-        # --- Post-quantum: channel restoration ---
+        self.qnode = qnode
+        self.weights_u1 = nn.Parameter(torch.randn(*weight_shapes['weights_u1']) * 0.01)
+        self.weights_u2 = nn.Parameter(torch.randn(*weight_shapes['weights_u2']) * 0.01)
+ 
+        # --- Post-quantum: symmetric expansion (1×1 → 3×3) ---
         self.post_conv = nn.Sequential(
-            nn.Conv2d(n_qubits, in_channels, kernel_size=1, bias=False),
+            # Step 1 — channel lift: n_qubits → C//4
+            nn.Conv2d(n_qubits, mid, kernel_size=1, bias=False),
+            nn.BatchNorm2d(mid),
+            nn.ReLU(inplace=True),
+            # Step 2 — spatial restore: C//4 → C
+            nn.Conv2d(mid, in_channels, kernel_size=3, padding=1, bias=False),
             nn.BatchNorm2d(in_channels),
             nn.ReLU(inplace=True),
         )
@@ -104,18 +121,17 @@ class QuFeXBottleneck(nn.Module):
         x_q = preprocess_quantum_input(x_q)
 
         # 4. Run QuFeX circuit on each spatial location
-        outputs = [self.quantum_layer(x_q[i]).unsqueeze(0) for i in range(B * H * W)]
-        x_q = torch.cat(outputs, dim=0)  # [B·H·W, n_qubits]
-
+        # .cpu() needed as default.qubit runs on CPU; .detach() removed so
+        # gradients flow back through pre_conv (paper trains end-to-end).
+        result = self.qnode(x_q.cpu().T, self.weights_u1.cpu(), self.weights_u2.cpu())
+        x_q = torch.stack(result, dim=1).to(x.device).float()
+ 
         # 5. Restore spatial layout: [B·H·W, n_qubits] → [B, n_qubits, H, W]
         x_q = x_q.reshape(B, H, W, self.n_qubits).permute(0, 3, 1, 2)
-
-        # 6. Restore channel count: [B, n_qubits, H, W] → [B, C, H, W]
-        return self.post_conv(x_q)
-
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        # Residual connection: bypass if quantum circuit learns nothing useful
-        return x + self._quantum_forward(x)
+ 
+        # 6. Restore channel count and add residual connection
+        # Paper: "y = Q(x) + x where Q(x) represents the output of the quantum layer"
+        return self.post_conv(x_q) + x
  
  
 # ---------------------------------------------------------------------------
