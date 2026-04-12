@@ -1,11 +1,9 @@
 import torch
 import torch.nn as nn
 from losses.cross_entropy import create_weighted_cross_entropy
-from losses.focal import create_focal_loss
 
 LOSS_REGISTRY = {
     'cross_entropy': create_weighted_cross_entropy,
-    'focal': create_focal_loss,
 }
 
 

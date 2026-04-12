@@ -10,7 +10,7 @@ def create_strongly_entangling_circuit(config):
     n_layers = config.get('n_layers', 2)
     dev = qml.device('lightning.gpu', wires=n_qubits)
 
-    @qml.qnode(dev, interface='torch', diff_method='parameter-shift')
+    @qml.qnode(dev, interface='torch', diff_method='adjoint')
     def circuit(inputs, weights):
         qml.AmplitudeEmbedding(features=inputs, wires=range(n_qubits),
                                pad_with=0.0, normalize=True)
