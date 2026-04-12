@@ -19,7 +19,7 @@ import yaml
 from models import get_model, MODE_NAMES
 from dataset.sen2fire import Sen2FireDataSet
 from utils.metrics import eval_image
-from utils.visualization import plot_scene_map
+from utils.visualization import plot_scene_map, plot_heatmap
 
 SCENE_DIMS = {1: (32, 27), 2: (22, 27), 3: (14, 36), 4: (21, 24)}
 SCENE_LIST_FILES = {
@@ -71,9 +71,12 @@ def process_scene(scene_id, model, config, output_dir, device):
             continue
         with torch.no_grad():
             pred = model(image)
-        _, pred = torch.max(interp(nn.functional.softmax(pred, dim=1)).detach(), 1)
-        pred = pred.squeeze().data.cpu().numpy().astype('uint8')
-        sparse.save_npz(patch_path, sparse.csr_matrix(pred))
+        probs = interp(nn.functional.softmax(pred, dim=1)).detach()
+        _, pred_binary = torch.max(probs, 1)
+        pred_binary = pred_binary.squeeze().data.cpu().numpy().astype('uint8')
+        sparse.save_npz(patch_path, sparse.csr_matrix(pred_binary))
+        prob_fire = probs[0, 1].cpu().numpy().astype('float32')
+        np.save(patch_path + '_prob.npy', prob_fire)  # save per-patch fire probability
 
     # Reconstruct scene map
     n_row, n_col = SCENE_DIMS[scene_id]
@@ -83,6 +86,7 @@ def process_scene(scene_id, model, config, output_dir, device):
     reconstructed_rgb = np.zeros((3, h, w))
     reconstructed_label = np.zeros((h, w))
     reconstructed_pred = np.zeros((h, w))
+    reconstructed_prob = np.zeros((h, w), dtype=np.float32)
 
     image_dir = os.path.join(config['data_dir'], f"scene{scene_id}")
     for row in tqdm(range(1, n_row + 1), desc=f"Scene {scene_id} map"):
@@ -104,9 +108,13 @@ def process_scene(scene_id, model, config, output_dir, device):
             pr_start = overlap // 2 if row > 1 else 0
             pc_start = overlap // 2 if col > 1 else 0
             reconstructed_pred[r_start:sr+patch_size, c_start:sc+patch_size] = patch_pred[pr_start:, pc_start:]
+            patch_prob = np.load(os.path.join(preds_dir, filename) + '_prob.npy')
+            reconstructed_prob[r_start:sr+patch_size, c_start:sc+patch_size] = patch_prob[pr_start:, pc_start:]  # stitch into full scene
 
     save_path = os.path.join(output_dir, f"scene{scene_id}_map.png")
     plot_scene_map(reconstructed_rgb, reconstructed_pred, reconstructed_label, save_path)
+    plot_heatmap(reconstructed_prob, f"Scene {scene_id} - fire probability",
+                 os.path.join(output_dir, f"scene{scene_id}_heatmap.png"))  # render continuous probability map
 
 
 def main():

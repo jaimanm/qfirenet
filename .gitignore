@@ -1,0 +1,20 @@
+# Model checkpoints (too large for git)
+*.pth
+*.pt
+
+# Experiment outputs (large binary/image files)
+experiments/**/*.png
+experiments/**/*.npz
+experiments/**/slurm-*.out
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+
+# Data (not stored in repo)
+../Sen2Fire/
+
+# Misc
+.DS_Store

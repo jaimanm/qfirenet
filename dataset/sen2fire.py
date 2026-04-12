@@ -98,7 +98,7 @@ class Sen2FireDataSet(data.Dataset):
         datafiles = self.files[index]
         # Load image, aerosol, and label data
         image = np.load(datafiles["patch"])['image'].astype(np.float32) / 10000.
-        aerosol = np.load(datafiles["patch"])['aerosol']
+        aerosol = np.load(datafiles["patch"])['aerosol'].astype(np.float32) / Max_values[12]
         label = np.load(datafiles["patch"])['label']
         name = datafiles["name"]
         # Process data based on the selected mode
