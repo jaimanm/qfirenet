@@ -1,0 +1,30 @@
+# Classical U-Net baseline (SWIR + aerosol, mode 5)
+# Matches the existing fall-semester results in experiments/classical_baseline/
+
+model: classical_unet
+mode: 5                    # swir_aerosol
+n_classes: 2
+
+# Training
+augment: true
+epochs: 5
+batch_size: 16
+test_batch_size: 50
+val_batch_size: 1
+learning_rate: 1.0e-4
+weight_decay: 5.0e-4
+seed: 1234
+
+# Loss
+loss: focal_loss # Options: cross_entropy | focal_loss
+fire_class_weight: 10   # per-class alpha weight for fire class (used by both losses)
+focal_gamma: 2.0      # focusing exponent for focal_loss (0 = weighted CE, 2 = default)
+
+# Data
+data_dir: ../Sen2Fire/
+train_list: ./dataset/train.txt
+val_list: ./dataset/val.txt
+test_list: ./dataset/test.txt
+
+# Output
+experiment_name: classical_baseline
