@@ -1,9 +1,11 @@
 from models.unet import ClassicalUNet
 from models.quantum_unet import QuantumUNet
+from models.fpn_unet import FPNUNet
 
 MODEL_REGISTRY = {
     'classical_unet': ClassicalUNet,
     'quantum_unet': QuantumUNet,
+    'fpn_unet' : FPNUNet
 }
 
 # Spectral band mode -> number of input channels
