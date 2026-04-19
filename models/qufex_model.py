@@ -1,7 +1,8 @@
+import warnings
 import torch
 from torch import nn
 import pennylane as qml
- 
+
 from models.unet import DoubleConv, Down, Up, OutConv
 from circuits import get_circuit
  
@@ -67,6 +68,7 @@ class QuFeXBottleneck(nn.Module):
         super().__init__()
         self.n_qubits = n_qubits
         self.in_channels = in_channels
+        self.fallback_count = 0   # tracks how many times quantum failed at runtime
 
         mid = max(in_channels // 4, n_qubits)   # safe intermediate width
 
@@ -131,9 +133,26 @@ class QuFeXBottleneck(nn.Module):
  
         # 6. Restore channel count and add residual connection
         # Paper: "y = Q(x) + x where Q(x) represents the output of the quantum layer"
-        return self.post_conv(x_q) + x
- 
- 
+        x_out = self.post_conv(x_q) + x
+        if torch.isnan(x_out).any() or torch.isinf(x_out).any():
+            raise ValueError("Quantum output contains NaN/Inf")
+        return x_out
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Run quantum path. If quantum fails for any reason, fall back to
+        returning x unchanged so the U-Net decoder still receives a valid
+        feature map via the residual connection."""
+        try:
+            return self._quantum_forward(x)
+        except Exception as e:
+            self.fallback_count += 1
+            warnings.warn(
+                f"[QuFeXBottleneck] Quantum failed (fallback #{self.fallback_count}): "
+                f"{type(e).__name__}: {e}. Returning classical residual."
+            )
+            return x
+
+
 # ---------------------------------------------------------------------------
 # Qu-Net  (QuFeX at the bottleneck of a classical U-Net)
 # ---------------------------------------------------------------------------
