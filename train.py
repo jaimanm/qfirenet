@@ -174,7 +174,7 @@ def train(config):
             torch.cuda.empty_cache()
             start_time = time.time()
 
-            patches = patches.to(device)
+            patches = patches.to(device).float()
             labels = labels.to(device).long()
             optimizer.zero_grad()
 
