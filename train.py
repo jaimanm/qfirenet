@@ -22,7 +22,8 @@ from models import get_model, MODE_NAMES
 from losses import get_loss
 from dataset.sen2fire import Sen2FireDataSet
 from utils.metrics import label_accuracy_score, eval_image
-from utils.visualization import plot_training_history
+from utils.visualization import plot_training_history, plot_scene_map
+from utils.augmentations import mixup_data, cutmix_data
 
 
 def load_config(config_path, cli_overrides):
@@ -163,6 +164,9 @@ def train(config):
 
     # Training loop
     epochs = config.get('epochs', 5)
+    mix_alpha = config.get('mix_alpha', 0.2)
+    mixup_prob = config.get('mixup', 0.0)
+    cutmix_prob = config.get('cutmix', 0.0)
     hist = []
     F1_best = 0.0
 
@@ -178,8 +182,20 @@ def train(config):
             labels = labels.to(device).long()
             optimizer.zero_grad()
 
-            preds = interp(model(patches))
-            loss = loss_fn(preds, labels)
+            # --- Augmentation Logic ---
+            r = torch.rand(1).item()
+            if r < mixup_prob:
+                patches, target_a, target_b, _, lam = mixup_data(patches, labels, mix_alpha)
+                preds = interp(model(patches))
+                loss = loss_fn(preds, target_a) * lam + loss_fn(preds, target_b) * (1. - lam)
+            elif r < mixup_prob + cutmix_prob:
+                patches, target_a, target_b, _, lam = cutmix_data(patches, labels, mix_alpha)
+                preds = interp(model(patches))
+                loss = loss_fn(preds, target_a) * lam + loss_fn(preds, target_b) * (1. - lam)
+            else:
+                preds = interp(model(patches))
+                loss = loss_fn(preds, labels)
+            # --------------------------
 
             # Batch metrics
             _, pred_labels = torch.max(preds, 1)
@@ -219,6 +235,31 @@ def train(config):
     test_metrics = evaluate(model, test_loader, device, num_classes, interp)
     log(f"  Test OA: {test_metrics['OA']*100:.2f}% | Fire P: {test_metrics['class1_P']*100:.2f}% | Fire R: {test_metrics['class1_R']*100:.2f}% | Fire F1: {test_metrics['class1_F1']*100:.2f}% | Fire IoU: {test_metrics['class1_IoU']*100:.2f}% | mIoU: {test_metrics['mIoU']*100:.2f}%")
 
+    # --- Visualizations ---
+    log("\nGenerating visualizations from test set...")
+    model.eval()
+    batch = next(iter(test_loader))
+    test_patches, test_labels, test_rgb, _ = batch
+    test_patches = test_patches.to(device).float()
+    with torch.no_grad():
+        test_preds = model(test_patches)
+    _, test_preds = torch.max(interp(nn.functional.softmax(test_preds, dim=1)).detach(), 1)
+    
+    test_preds = test_preds.cpu().numpy()
+    test_labels = test_labels.squeeze().numpy()
+    
+    # test_rgb was not returned securely by Sen2Fire mode 5 (it returns shape info). 
+    # Extract the first 3 channels (SWIR, NIR, Red) as a false-color composite.
+    # Multiply by 1500 to cancel out the /1500 division explicitly done in plot_scene_map.
+    test_rgb = test_patches[:, :3, :, :].cpu().numpy() * 1500.0
+    
+    n_samples = min(5, test_patches.size(0))
+    for i in range(n_samples):
+        # Draw explicit visualizations spanning ground truth, detections, and raw context
+        plot_scene_map(test_rgb[i], test_preds[i], test_labels[i], os.path.join(exp_dir, f'test_visualization_{i}.png'))
+    log("Visualizations saved.")
+    # ----------------------
+
     log_file.close()
 
     # Save history
@@ -243,6 +284,9 @@ def main():
     parser.add_argument('--data_dir', type=str)
     parser.add_argument('--experiment_name', type=str)
     parser.add_argument('--seed', type=int)
+    parser.add_argument('--mixup', type=float)
+    parser.add_argument('--cutmix', type=float)
+    parser.add_argument('--mix_alpha', type=float)
     args = parser.parse_args()
 
     overrides = {k: v for k, v in vars(args).items() if k != 'config' and v is not None}

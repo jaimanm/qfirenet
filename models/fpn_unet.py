@@ -93,7 +93,7 @@ class FPNUNet(nn.Module):
         x3 = self.down2(x2)    # 256 ch,          128x128
         x4 = self.down3(x3)    # 512 ch,          64x64
         x5 = self.down4(x4)    # 512 ch (bilin),  32x32
-        x5 = self.dropout(x5)  # Drop out 50% of the deepest features
+        # x5 = self.dropout(x5)  # Drop out 50% of the deepest features
 
         # ── Lateral projections ───────────────────────────────────────────
         l5 = self.lat5(x5)
