@@ -60,3 +60,31 @@ def cutmix_data(x, y, alpha=0.2):
         mixed_y[:, :, bby1:bby2, bbx1:bbx2] = y_b[:, :, bby1:bby2, bbx1:bbx2]
 
     return mixed_x, y_a, y_b, mixed_y, lam
+
+
+def aerosol_aug(x, prob=0.5, scale_min=1.0, scale_max=6.0, aerosol_channel=3):
+    """Randomly scale the aerosol channel to simulate test-domain smoke intensity.
+
+    The train/test domain shift analysis shows Channel 3 (aerosol) is 5.3x
+    higher in the test set (mean 1.42 vs 0.27). This augmentation randomly
+    scales that channel at training time to expose the model to the full
+    intensity range it will encounter at test time.
+
+    Args:
+        x: Input tensor of shape [B, C, H, W].
+        prob: Per-sample probability of applying the scaling (default 0.5).
+        scale_min: Minimum scale factor (default 1.0, i.e. no reduction).
+        scale_max: Maximum scale factor (default 6.0, matching domain ratio).
+        aerosol_channel: Channel index of the aerosol band (default 3).
+
+    Returns:
+        Augmented tensor (cloned, original is not modified).
+    """
+    if x.size(1) <= aerosol_channel:
+        return x
+    x = x.clone()
+    apply = torch.rand(x.size(0), device=x.device) < prob
+    scales = torch.empty(x.size(0), device=x.device).uniform_(scale_min, scale_max)
+    scales = torch.where(apply, scales, torch.ones_like(scales))
+    x[:, aerosol_channel] *= scales.view(-1, 1, 1)
+    return x

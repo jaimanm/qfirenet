@@ -1,0 +1,44 @@
+# FPN U-Net with targeted aerosol channel augmentation (mode 5: swir_aerosol)
+#
+# Addresses the domain shift in Channel 3 (aerosol): train mean 0.27 vs
+# test mean 1.42 (5.3x higher). During training, Channel 3 is randomly
+# scaled by a factor in [1.0, 6.0] with 50% per-sample probability,
+# exposing the model to the full intensity range seen at test time.
+
+model: fpn_unet
+mode: 5
+n_classes: 2
+
+# Training
+epochs: 5
+batch_size: 8
+test_batch_size: 8
+val_batch_size: 1
+learning_rate: 1.0e-4
+weight_decay: 5.0e-4
+seed: 1234
+
+# Loss
+loss: cross_entropy
+fire_class_weight: 10
+
+# FPN
+fpn_out_channels: 128
+
+# Augmentation
+mixup: 0.3
+cutmix: 0.3
+mix_alpha: 0.2
+
+# Aerosol channel augmentation
+aerosol_aug_prob: 0.5
+aerosol_channel: 3
+
+# Data
+data_dir: ../Sen2Fire/
+train_list: ./dataset/train.txt
+val_list: ./dataset/val.txt
+test_list: ./dataset/test.txt
+
+# Output
+experiment_name: fpn_aerosol_aug

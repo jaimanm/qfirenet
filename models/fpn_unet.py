@@ -19,10 +19,11 @@ class SmoothBlock(nn.Module):
     """3x3 conv applied after top-down fusion to remove aliasing."""
     def __init__(self, channels):
         super().__init__()
-        self.conv = nn.Conv2d(channels, channels, kernel_size=3, padding=1)
+        self.conv = nn.Conv2d(channels, channels, kernel_size=3, padding=1, bias=False)
+        self.bn = nn.BatchNorm2d(channels)
 
     def forward(self, x):
-        return F.relu(self.conv(x))
+        return F.relu(self.bn(self.conv(x)))
 
 
 class FPNUNet(nn.Module):
@@ -93,7 +94,7 @@ class FPNUNet(nn.Module):
         x3 = self.down2(x2)    # 256 ch,          128x128
         x4 = self.down3(x3)    # 512 ch,          64x64
         x5 = self.down4(x4)    # 512 ch (bilin),  32x32
-        # x5 = self.dropout(x5)  # Drop out 50% of the deepest features
+        x5 = self.dropout(x5)   # Drop out 50% of the deepest features
 
         # ── Lateral projections ───────────────────────────────────────────
         l5 = self.lat5(x5)

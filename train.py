@@ -23,7 +23,7 @@ from losses import get_loss
 from dataset.sen2fire import Sen2FireDataSet
 from utils.metrics import label_accuracy_score, eval_image
 from utils.visualization import plot_training_history, plot_scene_map
-from utils.augmentations import mixup_data, cutmix_data
+from utils.augmentations import mixup_data, cutmix_data, aerosol_aug
 
 
 def load_config(config_path, cli_overrides):
@@ -167,6 +167,8 @@ def train(config):
     mix_alpha = config.get('mix_alpha', 0.2)
     mixup_prob = config.get('mixup', 0.0)
     cutmix_prob = config.get('cutmix', 0.0)
+    aerosol_prob = config.get('aerosol_aug_prob', 0.0)
+    aerosol_ch = config.get('aerosol_channel', 3)
     hist = []
     F1_best = 0.0
 
@@ -181,6 +183,9 @@ def train(config):
             patches = patches.to(device)
             labels = labels.to(device).long()
             optimizer.zero_grad()
+
+            if aerosol_prob > 0.0:
+                patches = aerosol_aug(patches, prob=aerosol_prob, aerosol_channel=aerosol_ch)
 
             # --- Augmentation Logic ---
             r = torch.rand(1).item()
@@ -287,6 +292,8 @@ def main():
     parser.add_argument('--mixup', type=float)
     parser.add_argument('--cutmix', type=float)
     parser.add_argument('--mix_alpha', type=float)
+    parser.add_argument('--aerosol_aug_prob', type=float)
+    parser.add_argument('--aerosol_channel', type=int)
     args = parser.parse_args()
 
     overrides = {k: v for k, v in vars(args).items() if k != 'config' and v is not None}
