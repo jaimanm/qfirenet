@@ -7,16 +7,16 @@ mode: 5 # swir_aerosol
 n_classes: 2
 
 # Quantum bottleneck
-n_qubits: 4 # Qu-Net 4(2) — the config the paper actually ran due to compute limits
-n_layers: 2 # trainable rotation layers inside QuFeX
+n_qubits: 8 # Qu-Net 8(1) — 8 qubits, 1 layer
+n_layers: 1 # trainable rotation layers inside QuFeX
 circuit: qufex_circuit
 
 # Training
-epochs: 5
+epochs: 25
 batch_size: 16
 test_batch_size: 50
 val_batch_size: 1
-learning_rate: 1.0e-4
+learning_rate: 5.0e-5
 weight_decay: 5.0e-4
 seed: 1234
 
