@@ -56,6 +56,9 @@ class FPNUNet(nn.Module):
         self.down2 = Down(128, 256)
         self.down3 = Down(256, 512)
         self.down4 = Down(512, 1024 // factor)
+        
+        # ── Regularization (Bottleneck Dropout) ───────────────────────────
+        self.dropout = nn.Dropout2d(p=0.5)
 
         # ── FPN lateral connections (one per encoder stage) ───────────────
         # Each lateral squashes the encoder's channel dim to fpn_channels
@@ -90,6 +93,7 @@ class FPNUNet(nn.Module):
         x3 = self.down2(x2)    # 256 ch,          128x128
         x4 = self.down3(x3)    # 512 ch,          64x64
         x5 = self.down4(x4)    # 512 ch (bilin),  32x32
+        x5 = self.dropout(x5)  # Drop out 50% of the deepest features
 
         # ── Lateral projections ───────────────────────────────────────────
         l5 = self.lat5(x5)
