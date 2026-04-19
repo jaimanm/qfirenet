@@ -108,7 +108,7 @@ class QuFeXBottleneck(nn.Module):
             nn.ReLU(inplace=True),
         )
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def _quantum_forward(self, x: torch.Tensor) -> torch.Tensor:
         """Compress → quantum → restore, returning [B, C, H, W]."""
         B, C, H, W = x.shape
 
