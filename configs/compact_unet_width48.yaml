@@ -1,0 +1,29 @@
+# Compact U-Net baseline (SWIR + aerosol, mode 5)
+# Matches the classical baseline training setup with reduced internal width.
+
+model: compact_unet
+base_channels: 48
+mode: 5                    # swir_aerosol
+n_classes: 2
+
+# Training
+epochs: 5
+batch_size: 16
+test_batch_size: 50
+val_batch_size: 1
+learning_rate: 1.0e-4
+weight_decay: 5.0e-4
+seed: 1234
+
+# Loss
+loss: cross_entropy
+fire_class_weight: 10
+
+# Data
+data_dir: ../Sen2Fire/
+train_list: ./dataset/train.txt
+val_list: ./dataset/val.txt
+test_list: ./dataset/test.txt
+
+# Output
+experiment_name: compact_unet_width48

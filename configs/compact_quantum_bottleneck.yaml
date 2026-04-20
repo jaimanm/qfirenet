@@ -1,0 +1,36 @@
+# Compact Quantum U-Net (SWIR + aerosol, mode 5)
+# Keeps the baseline U-Net width while reducing parameters into the quantum bottleneck.
+
+model: compact_quantum_unet
+circuit: strongly_entangling
+base_channels: 64
+quantum_bottleneck_channels: 64
+quantum_bottleneck_spatial_size: 4
+mode: 5                    # swir_aerosol
+n_classes: 2
+
+# Quantum
+n_qubits: 8
+n_layers: 2
+
+# Training
+epochs: 5
+batch_size: 16
+test_batch_size: 50
+val_batch_size: 1
+learning_rate: 1.0e-4
+weight_decay: 5.0e-4
+seed: 1234
+
+# Loss
+loss: cross_entropy
+fire_class_weight: 10
+
+# Data
+data_dir: ../Sen2Fire/
+train_list: ./dataset/train.txt
+val_list: ./dataset/val.txt
+test_list: ./dataset/test.txt
+
+# Output
+experiment_name: compact_quantum_bottleneck
