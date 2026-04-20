@@ -60,7 +60,8 @@ def get_data_loaders(config):
     common['num_workers'] = n_workers
 
     train_loader = data.DataLoader(
-        Sen2FireDataSet(config['data_dir'], config['train_list'], mode=mode),
+        Sen2FireDataSet(config['data_dir'], config['train_list'], mode=mode,
+                        augment=config.get('augment', False)),
         batch_size=config.get('batch_size', 16), **common)
 
     val_loader = data.DataLoader(
@@ -142,7 +143,7 @@ def train(config):
         log_file.flush()
 
     log(f"Config: {config.get('experiment_name')}")
-    log(f"Model: {config['model']} | Mode: {config['mode']} ({MODE_NAMES[config['mode']]})")
+    log(f"Model: {config['model']} | Mode: {config['mode']} ({MODE_NAMES[config['mode']]}) | Augment: {config.get('augment', False)}")
     log(f"Output: {exp_dir}")
 
     # Model, optimizer, loss
