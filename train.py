@@ -175,7 +175,7 @@ def train(config):
             torch.cuda.empty_cache()
             start_time = time.time()
 
-            patches = patches.to(device)
+            patches = patches.to(device).float()
             labels = labels.to(device).long()
             optimizer.zero_grad()
 
@@ -206,6 +206,8 @@ def train(config):
         log("Validating...")
         val_metrics = evaluate(model, val_loader, device, num_classes, interp)
         log(f"  Val OA: {val_metrics['OA']*100:.2f}% | Fire F1: {val_metrics['class1_F1']*100:.2f}% | Fire IoU: {val_metrics['class1_IoU']*100:.2f}% | mIoU: {val_metrics['mIoU']*100:.2f}%")
+
+        model.train()
 
         if val_metrics['class1_F1'] > F1_best:
             F1_best = val_metrics['class1_F1']
