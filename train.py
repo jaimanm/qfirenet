@@ -15,6 +15,7 @@ import torch
 import torch.nn as nn
 from torch.optim import Adam
 from torch.utils import data
+from torch.utils.data import WeightedRandomSampler
 from tqdm import tqdm
 import yaml
 
@@ -46,10 +47,53 @@ def setup_experiment_dir(config):
     return exp_dir
 
 
-def get_data_loaders(config):
+def build_fire_aware_sampler(train_dataset, config, log=None):
+    """Create a sampler that increases the share of fire-containing patches."""
+    if not config.get('use_fire_aware_sampler', False):
+        if log is not None:
+            log("Train sampler: default shuffled sampling")
+        return None
+
+    target_fire_fraction = config.get('target_fire_patch_fraction', 0.35)
+    if not 0.0 < target_fire_fraction < 1.0:
+        raise ValueError("target_fire_patch_fraction must be between 0 and 1.")
+
+    fire_flags = np.asarray(train_dataset.get_fire_presence_flags(), dtype=bool)
+    num_positive = int(fire_flags.sum())
+    num_negative = len(fire_flags) - num_positive
+
+    if num_positive == 0 or num_negative == 0:
+        if log is not None:
+            log(
+                "Train sampler: fire-aware sampling requested but train split has "
+                "only one patch class. Falling back to shuffled sampling."
+            )
+        return None
+
+    sample_weights = np.where(
+        fire_flags,
+        target_fire_fraction / num_positive,
+        (1.0 - target_fire_fraction) / num_negative,
+    )
+
+    if log is not None:
+        log(
+            "Train sampler: fire-aware sampling enabled | "
+            f"Fire patches: {num_positive} | Non-fire patches: {num_negative} | "
+            f"Target fire fraction: {target_fire_fraction:.2f}"
+        )
+
+    return WeightedRandomSampler(
+        weights=torch.as_tensor(sample_weights, dtype=torch.double),
+        num_samples=len(train_dataset),
+        replacement=True,
+    )
+
+
+def get_data_loaders(config, log=None):
     """Create train/val/test data loaders."""
     mode = config['mode']
-    common = {'pin_memory': True, 'shuffle': True}
+    common = {'pin_memory': True}
 
     # Auto-detect number of workers
     if 'SLURM_CPUS_PER_TASK' in os.environ:
@@ -59,9 +103,16 @@ def get_data_loaders(config):
 
     common['num_workers'] = n_workers
 
+    train_dataset = Sen2FireDataSet(config['data_dir'], config['train_list'], mode=mode)
+    train_sampler = build_fire_aware_sampler(train_dataset, config, log=log)
+
     train_loader = data.DataLoader(
-        Sen2FireDataSet(config['data_dir'], config['train_list'], mode=mode),
-        batch_size=config.get('batch_size', 16), **common)
+        train_dataset,
+        batch_size=config.get('batch_size', 16),
+        shuffle=train_sampler is None,
+        sampler=train_sampler,
+        **common,
+    )
 
     val_loader = data.DataLoader(
         Sen2FireDataSet(config['data_dir'], config['val_list'], mode=mode),
@@ -158,7 +209,7 @@ def train(config):
     interp = nn.Upsample(size=input_size, mode='bilinear')
 
     # Data
-    train_loader, val_loader, test_loader = get_data_loaders(config)
+    train_loader, val_loader, test_loader = get_data_loaders(config, log=log)
     log(f"Train: {len(train_loader)} batches | Val: {len(val_loader)} | Test: {len(test_loader)}")
 
     # Training loop
