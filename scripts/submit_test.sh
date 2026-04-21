@@ -40,11 +40,6 @@ if [ "X$mysoftwaresrc" = "X" ]; then
   export PYTHONPATH=$HOME/.local/lib/python3.10/site-packages:$PYTHONPATH
 else
   source ~/scratch.hpcintro-shared/bin/condainit.sh $mysoftwaresrc
-  ## TEMPORARY: tqdm and pyyaml are not yet in py3.13q, so we pull them from user packages.
-  ## Once Dr. Klein installs them into py3.13q, remove the line below.
-  export PYTHONPATH=$HOME/.local/lib/python3.13/site-packages:$PYTHONPATH
-  ## Until then, each user must run once on a login node:
-  ##   source ~/scratch.hpcintro-shared/bin/condainit.sh py3.13q && pip install tqdm pyyaml
 fi
 
 ## - limit the openMP threadpool to the number of allocated cores
