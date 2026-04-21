@@ -1,0 +1,47 @@
+# Classical U-Net — patch-level random split
+#
+# Mirrors fpn_random_split but uses the classical_unet backbone (mode 5 /
+# SWIR + aerosol) instead of FPN-UNet.  All 2466 patches from scenes 1-4 are
+# pooled, shuffled with the fixed seed, and re-partitioned 70/15/15 by ratio.
+#
+# This removes the train<->test domain shift: the original scene-level split
+# gave train=scenes1-2, val=scene3, test=scene4, so the model never saw a
+# single scene-4 patch during training.  With random_split every geographic
+# scene contributes to every partition:
+#   train = 1726 patches | val = 369 | test = 371
+
+model: classical_unet
+mode: 5                    # swir_aerosol
+n_classes: 2
+
+# Training
+epochs: 15
+batch_size: 16
+test_batch_size: 16
+val_batch_size: 1
+learning_rate: 1.0e-4
+weight_decay: 5.0e-4
+seed: 1234
+
+# Loss
+loss: cross_entropy
+fire_class_weight: 10
+
+# Augmentation
+mixup: 0.1
+cutmix: 0.1
+mix_alpha: 0.2
+
+# Data
+data_dir: ../Sen2Fire/
+train_list: ./dataset/train.txt
+val_list:   ./dataset/val.txt
+test_list:  ./dataset/test.txt
+
+# Random patch-level split (overrides the scene-based lists above)
+random_split: true
+random_split_train_ratio: 0.70
+random_split_val_ratio:   0.15
+
+# Output
+experiment_name: classical_random_split

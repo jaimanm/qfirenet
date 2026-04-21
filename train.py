@@ -24,6 +24,7 @@ from dataset.sen2fire import Sen2FireDataSet
 from utils.metrics import label_accuracy_score, eval_image
 from utils.visualization import plot_training_history, plot_scene_map
 from utils.augmentations import mixup_data, cutmix_data, aerosol_aug
+from utils.splits import make_random_split_lists
 
 
 def load_config(config_path, cli_overrides):
@@ -47,8 +48,30 @@ def setup_experiment_dir(config):
     return exp_dir
 
 
+
+class _InMemoryDataSet(Sen2FireDataSet):
+    """Sen2FireDataSet variant that accepts a StringIO instead of a file path."""
+    def __init__(self, root, list_io, mode=5):
+        # Bypass the parent __init__ file-read and populate directly.
+        self.root = root
+        self.list_path = '<in-memory>'
+        self.mode = mode
+        self.img_ids = [line.strip() for line in list_io if line.strip()]
+        self.files = [
+            {'patch': os.path.join(self.root, name), 'name': name}
+            for name in self.img_ids
+        ]
+
+
 def get_data_loaders(config):
-    """Create train/val/test data loaders."""
+    """Create train/val/test data loaders.
+
+    When ``random_split: true`` is present in config the patches from all
+    three scene-based list files are pooled, shuffled, and re-split by ratio
+    (default 70 / 15 / 15).  This ensures every split sees patches from every
+    geographic scene and eliminates the train↔test domain shift caused by the
+    original scene-level partitioning.
+    """
     mode = config['mode']
     common = {'pin_memory': True, 'shuffle': True}
 
@@ -60,18 +83,29 @@ def get_data_loaders(config):
 
     common['num_workers'] = n_workers
 
+    if config.get('random_split', False):
+        # --- Patch-level random split across all scenes ---
+        seed = config.get('seed', 1234)
+        split_ios, split_sizes = make_random_split_lists(config, seed)
+        train_ds = _InMemoryDataSet(config['data_dir'], split_ios['train'], mode=mode)
+        val_ds   = _InMemoryDataSet(config['data_dir'], split_ios['val'],   mode=mode)
+        test_ds  = _InMemoryDataSet(config['data_dir'], split_ios['test'],  mode=mode)
+        print(f"[random_split] train={split_sizes['train']} | val={split_sizes['val']} | test={split_sizes['test']} patches")
+    else:
+        # --- Original scene-based split (default) ---
+        train_ds = Sen2FireDataSet(config['data_dir'], config['train_list'], mode=mode)
+        val_ds   = Sen2FireDataSet(config['data_dir'], config['val_list'],   mode=mode)
+        test_ds  = Sen2FireDataSet(config['data_dir'], config['test_list'],  mode=mode)
+
     train_loader = data.DataLoader(
-        Sen2FireDataSet(config['data_dir'], config['train_list'], mode=mode),
-        batch_size=config.get('batch_size', 16), **common)
+        train_ds, batch_size=config.get('batch_size', 16), **common)
 
     val_loader = data.DataLoader(
-        Sen2FireDataSet(config['data_dir'], config['val_list'], mode=mode),
-        batch_size=config.get('val_batch_size', 1),
+        val_ds, batch_size=config.get('val_batch_size', 1),
         num_workers=n_workers, pin_memory=True, shuffle=False)
 
     test_loader = data.DataLoader(
-        Sen2FireDataSet(config['data_dir'], config['test_list'], mode=mode),
-        batch_size=config.get('test_batch_size', 50),
+        test_ds, batch_size=config.get('test_batch_size', 50),
         num_workers=n_workers, pin_memory=True, shuffle=False)
 
     return train_loader, val_loader, test_loader
