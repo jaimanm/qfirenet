@@ -39,24 +39,22 @@ def create_qbnet_circuit(config):
     n_qubits = config.get("n_qubits", 4)
     n_layers = config.get("n_layers", 2)
 
-    dev = qml.device("lightning.qubit", wires=n_qubits)
+    dev = qml.device("default.qubit", wires=n_qubits)
 
-    @qml.qnode(dev, interface="torch", diff_method="adjoint")
+    @qml.qnode(dev, interface="torch", diff_method="backprop")
     def circuit(inputs, weights):
         # ------------------------------------------------------------------ #
-        # Encoding: RY angle embedding                                         #
-        # inputs shape delivered from _quantum_forward: [n_qubits, B*H*W]     #
-        # PennyLane broadcasts over the batch dimension automatically.         #
-        # ------------------------------------------------------------------ #
-        for i in range(n_qubits):
-            qml.RY(inputs[i], wires=i)
-
-        # ------------------------------------------------------------------ #
-        # Variational layers                                                   #
+        # Variational layers with data re-uploading                            #
+        # Inputs are re-encoded before each layer so the circuit sees the      #
+        # data at every depth, making it exponentially more expressive         #
+        # without adding trainable parameters (Pérez-Salinas et al. 2020).    #
         # ------------------------------------------------------------------ #
         for layer in range(n_layers):
+            # Re-upload: RY angle embedding at every layer
+            for i in range(n_qubits):
+                qml.RY(inputs[i], wires=i)
+
             # U3(θ, φ, λ) = RZ(φ) · RY(θ) · RZ(λ)  (PennyLane convention)
-            # Gives full single-qubit rotational freedom with 3 parameters.
             for i in range(n_qubits):
                 qml.U3(
                     weights[layer, i, 0],  # theta
@@ -65,9 +63,7 @@ def create_qbnet_circuit(config):
                     wires=i,
                 )
 
-            # Nearest-neighbour CNOT ladder (open chain).
-            # Unlike QuFeX's CZ ring, there is NO wrap-around connection,
-            # so entanglement is strictly local (not global).
+            # Nearest-neighbour CNOT ladder (open chain)
             for i in range(n_qubits - 1):
                 qml.CNOT(wires=[i, i + 1])
 

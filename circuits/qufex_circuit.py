@@ -31,17 +31,20 @@ def create_qufex_circuit(config):
     assert n_qubits % 2 == 0, "n_qubits must be even for the U1/U2 split."
     half = n_qubits // 2
 
-    dev = qml.device("lightning.qubit", wires=n_qubits)
+    dev = qml.device("default.qubit", wires=n_qubits)
 
-    @qml.qnode(dev, interface="torch", diff_method="adjoint")
+    @qml.qnode(dev, interface="torch", diff_method="backprop")
     def circuit(inputs, weights_u1, weights_u2):
-        # ---- Encoding: X-basis angle encoding (H + RZ) ----
-        for i in range(n_qubits):
-            qml.Hadamard(wires=i)
-            qml.RZ(inputs[i], wires=i)
-
-        # ---- Variational layers ----
+        # ---- Variational layers with data re-uploading ----
+        # Inputs are re-encoded before each layer so the circuit sees the
+        # data at every depth, making it exponentially more expressive
+        # without adding trainable parameters (Pérez-Salinas et al. 2020).
         for layer in range(n_layers):
+            # Re-upload: X-basis angle encoding (H + RZ) at every layer
+            for i in range(n_qubits):
+                qml.Hadamard(wires=i)
+                qml.RZ(inputs[i], wires=i)
+
             # U1 block: first half of qubits — RX + RZ
             for i in range(half):
                 qml.RX(weights_u1[layer, i, 0], wires=i)
@@ -52,7 +55,7 @@ def create_qufex_circuit(config):
                 qml.RX(weights_u2[layer, i, 0], wires=half + i)
                 qml.RY(weights_u2[layer, i, 1], wires=half + i)
 
-            # ---- Entanglement: CZ ring ----
+            # Entanglement: CZ ring
             for i in range(n_qubits - 1):
                 qml.CZ(wires=[i, i + 1])
             qml.CZ(wires=[n_qubits - 1, 0])
