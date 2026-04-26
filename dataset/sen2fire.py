@@ -1,4 +1,3 @@
-import io
 import os
 import os.path as osp
 import numpy as np
@@ -160,56 +159,6 @@ class _InMemoryDataSet(Sen2FireDataSet):
             {'patch': os.path.join(self.root, name), 'name': name}
             for name in self.img_ids
         ]
-
-
-def get_data_loaders(config):
-    """Create train/val/test data loaders.
-
-    When ``random_split: true`` is present in config the patches from all
-    three scene-based list files are pooled, shuffled, and re-split by ratio
-    (default 70 / 15 / 15).  This ensures every split sees patches from every
-    geographic scene and eliminates the train↔test domain shift caused by the
-    original scene-level partitioning.
-    """
-    from utils.splits import make_random_split_lists
-
-    mode = config['mode']
-    common = {'pin_memory': True, 'shuffle': True}
-
-    # Auto-detect number of workers
-    if 'SLURM_CPUS_PER_TASK' in os.environ:
-        n_workers = int(os.environ['SLURM_CPUS_PER_TASK'])
-    else:
-        n_workers = min(4, os.cpu_count() or 1)
-
-    common['num_workers'] = n_workers
-
-    if config.get('random_split', False):
-        # --- Patch-level random split across all scenes ---
-        seed = config.get('seed', 1234)
-        split_ios, split_sizes = make_random_split_lists(config, seed)
-        train_ds = _InMemoryDataSet(config['data_dir'], split_ios['train'], mode=mode)
-        val_ds   = _InMemoryDataSet(config['data_dir'], split_ios['val'],   mode=mode)
-        test_ds  = _InMemoryDataSet(config['data_dir'], split_ios['test'],  mode=mode)
-        print(f"[random_split] train={split_sizes['train']} | val={split_sizes['val']} | test={split_sizes['test']} patches")
-    else:
-        # --- Original scene-based split (default) ---
-        train_ds = Sen2FireDataSet(config['data_dir'], config['train_list'], mode=mode)
-        val_ds   = Sen2FireDataSet(config['data_dir'], config['val_list'],   mode=mode)
-        test_ds  = Sen2FireDataSet(config['data_dir'], config['test_list'],  mode=mode)
-
-    train_loader = data.DataLoader(
-        train_ds, batch_size=config.get('batch_size', 16), **common)
-
-    val_loader = data.DataLoader(
-        val_ds, batch_size=config.get('val_batch_size', 1),
-        num_workers=n_workers, pin_memory=True, shuffle=False)
-
-    test_loader = data.DataLoader(
-        test_ds, batch_size=config.get('test_batch_size', 50),
-        num_workers=n_workers, pin_memory=True, shuffle=False)
-
-    return train_loader, val_loader, test_loader
 
 
 if __name__ == '__main__':
