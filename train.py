@@ -283,6 +283,7 @@ def main():
     parser.add_argument('--data_dir', type=str)
     parser.add_argument('--experiment_name', type=str)
     parser.add_argument('--seed', type=int)
+    parser.add_argument('--random_split', action='store_true', default=None)
     parser.add_argument('--mixup', type=float)
     parser.add_argument('--cutmix', type=float)
     parser.add_argument('--mix_alpha', type=float)
