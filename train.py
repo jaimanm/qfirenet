@@ -22,7 +22,7 @@ from models import get_model, MODE_NAMES
 from losses import get_loss
 from dataset.sen2fire import Sen2FireDataSet, _InMemoryDataSet
 from utils.metrics import label_accuracy_score, eval_image
-from utils.visualization import plot_training_history, plot_scene_map
+from utils.visualization import plot_training_history
 from utils.augmentations import mixup_data, cutmix_data, aerosol_aug
 from utils.splits import make_random_split_lists
 
@@ -258,31 +258,6 @@ def train(config):
         model.load_state_dict(torch.load(best_path, map_location=device, weights_only=True))
     test_metrics = evaluate(model, test_loader, device, num_classes, interp)
     log(f"  Test OA: {test_metrics['OA']*100:.2f}% | Fire P: {test_metrics['class1_P']*100:.2f}% | Fire R: {test_metrics['class1_R']*100:.2f}% | Fire F1: {test_metrics['class1_F1']*100:.2f}% | Fire IoU: {test_metrics['class1_IoU']*100:.2f}% | mIoU: {test_metrics['mIoU']*100:.2f}%")
-
-    # --- Visualizations ---
-    log("\nGenerating visualizations from test set...")
-    model.eval()
-    batch = next(iter(test_loader))
-    test_patches, test_labels, test_rgb, _ = batch
-    test_patches = test_patches.to(device).float()
-    with torch.no_grad():
-        test_preds = model(test_patches)
-    _, test_preds = torch.max(interp(nn.functional.softmax(test_preds, dim=1)).detach(), 1)
-    
-    test_preds = test_preds.cpu().numpy()
-    test_labels = test_labels.squeeze().numpy()
-    
-    # test_rgb was not returned securely by Sen2Fire mode 5 (it returns shape info). 
-    # Extract the first 3 channels (SWIR, NIR, Red) as a false-color composite.
-    # Multiply by 1500 to cancel out the /1500 division explicitly done in plot_scene_map.
-    test_rgb = test_patches[:, :3, :, :].cpu().numpy() * 1500.0
-    
-    n_samples = min(5, test_patches.size(0))
-    for i in range(n_samples):
-        # Draw explicit visualizations spanning ground truth, detections, and raw context
-        plot_scene_map(test_rgb[i], test_preds[i], test_labels[i], os.path.join(exp_dir, f'test_visualization_{i}.png'))
-    log("Visualizations saved.")
-    # ----------------------
 
     log_file.close()
 
