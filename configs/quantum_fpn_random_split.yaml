@@ -1,0 +1,56 @@
+# Quantum FPN-UNet — patch-level random split
+#
+# Fair apples-to-apples comparison against fpn_random_split (Test Fire F1: 39.76%).
+# Identical training conditions (mode 4 / SWIR-only, 70/15/15 patch split, same
+# augmentation and seed) with the only difference being the quantum bottleneck
+# inserted between the U-Net encoder and the FPN decoder.
+#
+# Runtime note:
+#   The quantum circuit is evaluated per-sample (AmplitudeEmbedding doesn't batch).
+#   Expect ~30–120 min/epoch on an A100, vs ~1 min/epoch for the classical FPN.
+#   Increase --time in submit_train.sh accordingly (e.g. --time=12:00:00).
+
+model: quantum_fpn_unet
+circuit: strongly_entangling
+mode: 4                          # swir (SWIR-only, 3 channels — aerosol ablated)
+n_classes: 2
+
+# Quantum
+n_qubits: 8
+n_layers: 2
+
+# Training
+epochs: 5                        # conservative start; extend if results are promising
+batch_size: 4                    # reduced vs classical FPN (quantum is the bottleneck)
+test_batch_size: 4
+val_batch_size: 1
+learning_rate: 1.0e-4
+weight_decay: 5.0e-4
+seed: 1234
+
+# Loss
+loss: cross_entropy
+fire_class_weight: 10
+
+# FPN
+fpn_out_channels: 128
+
+# Augmentation (same as fpn_random_split)
+mixup: 0.1
+cutmix: 0.1
+mix_alpha: 0.2
+
+# Data
+data_dir: ../Sen2Fire/
+train_list: ./dataset/train.txt
+val_list:   ./dataset/val.txt
+test_list:  ./dataset/test.txt
+
+# Random patch-level split (same as fpn_random_split for fair comparison)
+# Pools all 2466 patches from scenes 1–4, shuffles with seed, then 70/15/15.
+random_split: true
+random_split_train_ratio: 0.70
+random_split_val_ratio:   0.15
+
+# Output
+experiment_name: quantum_fpn_random_split
