@@ -1,0 +1,28 @@
+# Classical U-Net on CaBuAr converted to Sen2Fire-style NPZ patches.
+# Run cabuar_preprocessing/convert_cabuar_to_sen2fire.py first.
+
+model: classical_unet
+mode: 4                    # swir; avoids relying on CaBuAr's fake zero aerosol channel
+n_classes: 2
+
+# Training
+epochs: 10
+batch_size: 16
+test_batch_size: 50
+val_batch_size: 1
+learning_rate: 1.0e-4
+weight_decay: 5.0e-4
+seed: 1234
+
+# Loss
+loss: cross_entropy
+fire_class_weight: 10
+
+# Data
+data_dir: ./cabuar_preprocessing/output/cabuar_sen2fire
+train_list: ./cabuar_preprocessing/output/splits/train.txt
+val_list: ./cabuar_preprocessing/output/splits/val.txt
+test_list: ./cabuar_preprocessing/output/splits/test.txt
+
+# Output
+experiment_name: classical_cabuar
