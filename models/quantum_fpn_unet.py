@@ -20,7 +20,8 @@ class QuantumFPNUNet(nn.Module):
 
     Architecture summary:
         Encoder   : DoubleConv + Down x4  (identical to ClassicalUNet)
-        Bottleneck: Dropout2d → flatten → FC → quantum circuit → FC → unflatten
+        Bottleneck: Dropout2d → GAP → FC → tanh → quantum circuit → FC → sigmoid
+                    → channel-attention rescaling of x5  (SE-net style)
         Decoder   : LateralBlock + SmoothBlock top-down FPN (identical to FPNUNet)
         Head      : OutConv (1×1 conv to n_classes)
 
@@ -59,20 +60,35 @@ class QuantumFPNUNet(nn.Module):
         # ── Bottleneck regularization ─────────────────────────────────────
         self.dropout = nn.Dropout2d(p=0.5)
 
-        # ── Quantum bottleneck ────────────────────────────────────────────
-        # x5 shape after down4: [B, 512, 32, 32]  (with bilinear=True, factor=2 → 1024//2=512)
+        # ── Quantum channel-attention bottleneck ──────────────────────────
+        # x5 shape after down4: [B, 512, 32, 32]  (bilinear=True → factor=2 → 512 ch)
+        #
+        # Previous design flattened 512×32×32 = 524 288 features down to
+        # 2^n_qubits = 256 values (2048:1 ratio) then tried to reconstruct
+        # full spatial maps from n_qubits = 8 outputs — impossible, and the
+        # adjoint gradient through AmplitudeEmbedding produced NaN losses.
+        #
+        # New design: SE-net style channel attention via quantum circuit.
+        #   GAP  : [B, 512, 32, 32] → [B, 512]          (spatial squeeze)
+        #   FC1  : [B, 512]         → [B, n_qubits]      (reasonable 64:1 ratio)
+        #   Tanh : scale to [-1, 1] for AngleEmbedding
+        #   QLayer: [B, n_qubits]   → [B, n_qubits]      (quantum transform)
+        #   FC2  : [B, n_qubits]    → [B, 512]           (channel excitation)
+        #   Sigmoid: gate in (0, 1)
+        #   x5 = x5 * gate[:, :, None, None]             (channel-wise rescaling)
+        #
+        # Spatial structure is fully preserved; the quantum circuit only
+        # modulates channel importance — a well-posed learning task.
         bottleneck_ch = 1024 // factor
-        H, W = 32, 32   # spatial size after 4 MaxPool2d(2) steps on 512×512 input
-        quantum_input_dim = 2 ** n_qubits   # AmplitudeEmbedding requires exactly this
 
-        self.flatten = nn.Flatten()
-        self.fc1 = nn.Linear(bottleneck_ch * H * W, quantum_input_dim)
+        self.gap = nn.AdaptiveAvgPool2d(1)          # global average pool
+        self.fc1 = nn.Linear(bottleneck_ch, n_qubits)
 
         qnode, weight_shapes = get_circuit(config)
         self.quantum_layer = qml.qnn.TorchLayer(qnode, weight_shapes)
 
-        self.fc2 = nn.Linear(n_qubits, bottleneck_ch * H * W)
-        self.unflatten = nn.Unflatten(1, (bottleneck_ch, H, W))
+        self.fc2   = nn.Linear(n_qubits, bottleneck_ch)
+        self.gate  = nn.Sigmoid()
 
         # ── FPN lateral connections (one per encoder stage) ───────────────
         self.lat5 = LateralBlock(1024 // factor, fpn_channels)
@@ -99,16 +115,20 @@ class QuantumFPNUNet(nn.Module):
             top_down, size=lateral.shape[-2:], mode='bilinear', align_corners=True
         ) + lateral
 
-    def _quantum_forward(self, x_fc):
+    def _quantum_forward(self, x):
         """Run quantum circuit on each sample in the batch individually.
 
-        AmplitudeEmbedding does not support native batching, so we loop
-        over samples and concatenate results. This is the dominant runtime
-        cost of the model (~50-200 ms per sample on CPU simulation).
+        PennyLane qnodes do not support native batching, so we loop over
+        samples and concatenate results.  With the SE-net bottleneck the
+        input is only [B, n_qubits] (e.g. 8 values), so this loop is cheap
+        compared to the previous 524 288-wide flatten approach.
+
+        Input  x : [B, n_qubits]  — tanh-scaled channel descriptors
+        Output   : [B, n_qubits]  — PauliZ expectation values in [-1, 1]
         """
         outputs = []
-        for i in range(x_fc.shape[0]):
-            out = self.quantum_layer(x_fc[i])
+        for i in range(x.shape[0]):
+            out = self.quantum_layer(x[i])
             outputs.append(out.unsqueeze(0))
         return torch.cat(outputs, dim=0)
 
@@ -123,12 +143,18 @@ class QuantumFPNUNet(nn.Module):
         x5 = self.down4(x4)    # [B, 512,  32,  32]
         x5 = self.dropout(x5)  # bottleneck regularization
 
-        # ── Quantum bottleneck ─────────────────────────────────────────────
-        x_flat = self.flatten(x5)               # [B, 512*32*32]
-        x_fc   = self.fc1(x_flat)               # [B, 2^n_qubits]
-        x_fc   = preprocess_quantum_input(x_fc) # clean NaN/inf, handle zero rows
-        x_q    = self._quantum_forward(x_fc)    # [B, n_qubits]  (serial loop)
-        x5     = self.unflatten(self.fc2(x_q))  # [B, 512, 32, 32]
+        # ── Quantum channel-attention bottleneck ───────────────────────────
+        # Squeeze: global average pool → channel descriptor
+        s = self.gap(x5).squeeze(-1).squeeze(-1)  # [B, 512]
+        # Compress to n_qubits; tanh maps to (-1,1) — valid AngleEmbedding range
+        s = torch.tanh(self.fc1(s))               # [B, n_qubits]
+        s = preprocess_quantum_input(s)            # guard against any NaN/inf
+        # Quantum transform
+        s = self._quantum_forward(s)              # [B, n_qubits]
+        # Excite back to channel dimension and gate in (0, 1)
+        s = self.gate(self.fc2(s))                # [B, 512]
+        # Apply channel attention: rescale each channel map independently
+        x5 = x5 * s.unsqueeze(-1).unsqueeze(-1)  # [B, 512, 32, 32]
 
         # ── FPN lateral projections ───────────────────────────────────────
         l5 = self.lat5(x5)   # [B, fpn_ch, 32,  32 ]

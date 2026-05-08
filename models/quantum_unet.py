@@ -7,14 +7,15 @@ from circuits import get_circuit
 
 
 def preprocess_quantum_input(x):
-    """Clean input tensor for quantum circuit (replace NaN/inf, handle zero rows)."""
-    batch = torch.nan_to_num(x, nan=0.0, posinf=0.0, neginf=0.0)
-    is_all_zero = (batch.abs().sum(dim=1) < 1e-6)
-    for i, zero_row in enumerate(is_all_zero):
-        if zero_row:
-            batch[i] = 0
-            batch[i, 0] = 1.0
-    return batch
+    """Clean input tensor for quantum circuit (replace NaN/inf).
+
+    With AngleEmbedding there is no normalization step, so zero-row handling
+    is no longer needed — AngleEmbedding simply encodes 0 as a zero rotation,
+    which is a valid quantum state.  We still guard against NaN/inf that could
+    theoretically arise from upstream linear layers with extreme weights during
+    the first few training iterations.
+    """
+    return torch.nan_to_num(x, nan=0.0, posinf=1.0, neginf=-1.0)
 
 
 class QuantumUNet(nn.Module):
@@ -40,18 +41,21 @@ class QuantumUNet(nn.Module):
         factor = 2 if bilinear else 1
         self.down4 = Down(512, 1024 // factor)
 
-        # Quantum bottleneck
-        quantum_input_shape = 2 ** n_qubits
-        H, W = 32, 32  # 512 / (2^4 pooling stages)
-        self.flatten = nn.Flatten()
-        self.fc1 = nn.Linear((1024 // factor) * H * W, quantum_input_shape)
+        # Quantum channel-attention bottleneck  (SE-net style)
+        # x5: [B, bottleneck_ch, 32, 32] — same fix as QuantumFPNUNet.
+        # GAP → FC1 → tanh → quantum → FC2 → sigmoid → channel rescaling.
+        # Replaces the previous flatten/expand design that had a 65 000:1
+        # compression ratio and produced NaN gradients via AmplitudeEmbedding.
+        bottleneck_ch = 1024 // factor
 
-        circuit_name = config.get('circuit', 'strongly_entangling')
+        self.gap  = nn.AdaptiveAvgPool2d(1)
+        self.fc1  = nn.Linear(bottleneck_ch, n_qubits)
+
         qnode, weight_shapes = get_circuit(config)
         self.quantum_layer = qml.qnn.TorchLayer(qnode, weight_shapes)
 
-        self.fc2 = nn.Linear(n_qubits, (1024 // factor) * H * W)
-        self.unflatten = nn.Unflatten(1, (1024 // factor, H, W))
+        self.fc2  = nn.Linear(n_qubits, bottleneck_ch)
+        self.gate = nn.Sigmoid()
 
         # Decoder
         self.up1 = Up(1024, 512 // factor, bilinear)
@@ -66,23 +70,21 @@ class QuantumUNet(nn.Module):
         x2 = self.down1(x1)
         x3 = self.down2(x2)
         x4 = self.down3(x3)
-        x5 = self.down4(x4)
+        x5 = self.down4(x4)   # [B, bottleneck_ch, 32, 32]
 
-        # Quantum bottleneck
-        x_flat = self.flatten(x5)
-        x_fc = self.fc1(x_flat)
-        x_fc_clean = preprocess_quantum_input(x_fc)
+        # Quantum channel-attention bottleneck
+        s = self.gap(x5).squeeze(-1).squeeze(-1)  # [B, bottleneck_ch]
+        s = torch.tanh(self.fc1(s))               # [B, n_qubits]  — scaled to (-1,1)
+        s = preprocess_quantum_input(s)            # guard NaN/inf
 
-        # Process each sample individually (AmplitudeEmbedding doesn't support batching)
-        batch_size = x_fc_clean.shape[0]
-        quantum_outputs = []
-        for i in range(batch_size):
-            single_output = self.quantum_layer(x_fc_clean[i])
-            quantum_outputs.append(single_output.unsqueeze(0))
-        x_quantum = torch.cat(quantum_outputs, dim=0)
+        # Run circuit sample-by-sample (PennyLane doesn't support native batching)
+        outputs = []
+        for i in range(s.shape[0]):
+            outputs.append(self.quantum_layer(s[i]).unsqueeze(0))
+        s = torch.cat(outputs, dim=0)             # [B, n_qubits]
 
-        x_fc2 = self.fc2(x_quantum)
-        x5 = self.unflatten(x_fc2)
+        s = self.gate(self.fc2(s))                # [B, bottleneck_ch]  — gate in (0,1)
+        x5 = x5 * s.unsqueeze(-1).unsqueeze(-1)  # [B, bottleneck_ch, 32, 32]
 
         # Decoder
         x = self.up1(x5, x4)

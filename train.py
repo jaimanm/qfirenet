@@ -236,6 +236,25 @@ def train(config):
             hist.append([loss.item(), batch_oa, batch_miou, elapsed])
 
             loss.backward()
+
+            # ── NaN gradient guard ────────────────────────────────────────
+            # If any gradient is NaN the optimizer step would corrupt all
+            # weights.  We skip the step, zero grads, and abort training so
+            # the problem is visible immediately rather than after N epochs of
+            # a silently dead model (all-zero predictions, ~96 % OA).
+            nan_in_grads = any(
+                p.grad is not None and torch.isnan(p.grad).any()
+                for p in model.parameters()
+            )
+            if nan_in_grads or torch.isnan(loss):
+                log(f"  [NaN DETECTED] Epoch {epoch}, Iter {batch_idx+1}: "
+                    f"loss={loss.item()}, nan_grads={nan_in_grads}. "
+                    "Aborting training — check circuit diff_method and embedding.")
+                optimizer.zero_grad()
+                log_file.close()
+                return
+            # ─────────────────────────────────────────────────────────────
+
             optimizer.step()
 
             if (batch_idx + 1) % 10 == 0:
