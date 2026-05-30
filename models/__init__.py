@@ -2,28 +2,22 @@ from models.unet import ClassicalUNet
 from models.compact_unet import CompactUNet
 from models.quantum_unet import QuantumUNet
 from models.compact_quantum_unet import CompactQuantumUNet
+from models.qufex_model import QuNet
+from models.qbnet_model import QBNet
 
 MODEL_REGISTRY = {
     'classical_unet': ClassicalUNet,
     'compact_unet': CompactUNet,
     'quantum_unet': QuantumUNet,
     'compact_quantum_unet': CompactQuantumUNet,
+    'qufex_unet': QuNet,
+    'qbnet_unet': QBNet,
 }
 
 # Spectral band mode -> number of input channels
 MODE_CHANNELS = {
-    0: 12,  # all_bands
-    1: 13,  # all_bands_aerosol
-    2: 3,   # rgb
-    3: 4,   # rgb_aerosol
-    4: 3,   # swir
-    5: 4,   # swir_aerosol
-    6: 3,   # nbr
-    7: 4,   # nbr_aerosol
-    8: 3,   # ndvi
-    9: 4,   # ndvi_aerosol
-    10: 6,  # rgb_swir_nbr_ndvi
-    11: 7,  # rgb_swir_nbr_ndvi_aerosol
+    0: 12, 1: 13, 2: 3, 3: 4, 4: 3, 5: 4,
+    6: 3, 7: 4, 8: 3, 9: 4, 10: 6, 11: 7,
 }
 
 MODE_NAMES = [

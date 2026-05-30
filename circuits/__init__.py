@@ -1,9 +1,13 @@
 from circuits.strongly_entangling import create_strongly_entangling_circuit
 from circuits.ry_cnot import create_ry_cnot_circuit
+from circuits.qufex_circuit import create_qufex_circuit
+from circuits.qbnet_circuit import create_qbnet_circuit
 
 CIRCUIT_REGISTRY = {
     'strongly_entangling': create_strongly_entangling_circuit,
     'ry_cnot': create_ry_cnot_circuit,
+    'qufex_circuit' : create_qufex_circuit,
+    'qbnet_circuit' : create_qbnet_circuit
 }
 
 

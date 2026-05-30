@@ -6,15 +6,22 @@
 experiments/**/*.png
 experiments/**/*.npz
 experiments/**/slurm-*.out
+experiments/slurm-*.out
 
 # Python
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
 .env
+venv/
+
+# Jupyter notebooks (except shared ones in notebooks/)
+*.ipynb
+!notebooks/*.ipynb
 
 # Data (not stored in repo)
 ../Sen2Fire/
 
-# Misc
+# OS
 .DS_Store
+Thumbs.db
