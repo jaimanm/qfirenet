@@ -24,6 +24,7 @@ venv/
 # Data (not stored in repo)
 ../Sen2Fire/
 /local_files
+/.claude
 
 # OS
 .DS_Store
