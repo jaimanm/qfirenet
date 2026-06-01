@@ -1,3 +1,4 @@
+import os
 import os.path as osp
 import numpy as np
 from torch.utils import data
@@ -171,6 +172,20 @@ class Sen2FireDataSet(data.Dataset):
 
         return max_values
     
+class _InMemoryDataSet(Sen2FireDataSet):
+    """Sen2FireDataSet variant that accepts a StringIO instead of a file path."""
+    def __init__(self, root, list_io, mode=5):
+        # Bypass the parent __init__ file-read and populate directly.
+        self.root = root
+        self.list_path = '<in-memory>'
+        self.mode = mode
+        self.img_ids = [line.strip() for line in list_io if line.strip()]
+        self.files = [
+            {'patch': os.path.join(self.root, name), 'name': name}
+            for name in self.img_ids
+        ]
+
+
 if __name__ == '__main__':
         
     root_path = ".../Sen2Fire/"

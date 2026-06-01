@@ -1,0 +1,31 @@
+# FPN U-Net baseline (SWIR + aerosol, mode 5)
+# Encoder identical to classical_unet; FPN replaces the decoder.
+
+model: fpn_unet
+mode: 5
+n_classes: 2
+
+# Training
+epochs: 5
+batch_size: 16
+test_batch_size: 16
+val_batch_size: 1
+learning_rate: 1.0e-4
+weight_decay: 5.0e-4
+seed: 1234
+
+# Loss
+loss: cross_entropy
+fire_class_weight: 10
+
+# FPN
+fpn_out_channels: 256
+
+# Data
+data_dir: ../Sen2Fire/
+train_list: ./dataset/train.txt
+val_list: ./dataset/val.txt
+test_list: ./dataset/test.txt
+
+# Output
+experiment_name: fpn_unet_baseline

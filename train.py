@@ -20,9 +20,11 @@ import yaml
 
 from models import get_model, MODE_NAMES
 from losses import get_loss
-from dataset.sen2fire import Sen2FireDataSet
+from dataset.sen2fire import Sen2FireDataSet, _InMemoryDataSet
 from utils.metrics import label_accuracy_score, eval_image
 from utils.visualization import plot_training_history
+from utils.augmentations import mixup_data, cutmix_data, aerosol_aug
+from utils.splits import make_random_split_lists
 
 
 def load_config(config_path, cli_overrides):
@@ -47,7 +49,14 @@ def setup_experiment_dir(config):
 
 
 def get_data_loaders(config):
-    """Create train/val/test data loaders."""
+    """Create train/val/test data loaders.
+
+    When ``random_split: true`` is present in config the patches from all
+    three scene-based list files are pooled, shuffled, and re-split by ratio
+    (default 70 / 15 / 15).  This ensures every split sees patches from every
+    geographic scene and eliminates the train↔test domain shift caused by the
+    original scene-level partitioning.
+    """
     mode = config['mode']
     common = {'pin_memory': True, 'shuffle': True}
 
@@ -59,19 +68,29 @@ def get_data_loaders(config):
 
     common['num_workers'] = n_workers
 
+    if config.get('random_split', False):
+        # --- Patch-level random split across all scenes ---
+        seed = config.get('seed', 1234)
+        split_ios, split_sizes = make_random_split_lists(config, seed)
+        train_ds = _InMemoryDataSet(config['data_dir'], split_ios['train'], mode=mode)
+        val_ds   = _InMemoryDataSet(config['data_dir'], split_ios['val'],   mode=mode)
+        test_ds  = _InMemoryDataSet(config['data_dir'], split_ios['test'],  mode=mode)
+        print(f"[random_split] train={split_sizes['train']} | val={split_sizes['val']} | test={split_sizes['test']} patches")
+    else:
+        # --- Original scene-based split (default) ---
+        train_ds = Sen2FireDataSet(config['data_dir'], config['train_list'], mode=mode, augment=config.get('augment', False))
+        val_ds   = Sen2FireDataSet(config['data_dir'], config['val_list'],   mode=mode)
+        test_ds  = Sen2FireDataSet(config['data_dir'], config['test_list'],  mode=mode)
+
     train_loader = data.DataLoader(
-        Sen2FireDataSet(config['data_dir'], config['train_list'], mode=mode,
-                        augment=config.get('augment', False)),
-        batch_size=config.get('batch_size', 16), **common)
+        train_ds, batch_size=config.get('batch_size', 16), **common)
 
     val_loader = data.DataLoader(
-        Sen2FireDataSet(config['data_dir'], config['val_list'], mode=mode),
-        batch_size=config.get('val_batch_size', 1),
+        val_ds, batch_size=config.get('val_batch_size', 1),
         num_workers=n_workers, pin_memory=True, shuffle=False)
 
     test_loader = data.DataLoader(
-        Sen2FireDataSet(config['data_dir'], config['test_list'], mode=mode),
-        batch_size=config.get('test_batch_size', 50),
+        test_ds, batch_size=config.get('test_batch_size', 50),
         num_workers=n_workers, pin_memory=True, shuffle=False)
 
     return train_loader, val_loader, test_loader
@@ -164,6 +183,11 @@ def train(config):
 
     # Training loop
     epochs = config.get('epochs', 5)
+    mix_alpha = config.get('mix_alpha', 0.2)
+    mixup_prob = config.get('mixup', 0.0)
+    cutmix_prob = config.get('cutmix', 0.0)
+    aerosol_prob = config.get('aerosol_aug_prob', 0.0)
+    aerosol_ch = config.get('aerosol_channel', 3)
     hist = []
     F1_best = 0.0
 
@@ -179,8 +203,23 @@ def train(config):
             labels = labels.to(device).long()
             optimizer.zero_grad()
 
-            preds = interp(model(patches))
-            loss = loss_fn(preds, labels)
+            if aerosol_prob > 0.0:
+                patches = aerosol_aug(patches, prob=aerosol_prob, aerosol_channel=aerosol_ch)
+
+            # --- Augmentation Logic ---
+            r = torch.rand(1).item()
+            if r < mixup_prob:
+                patches, target_a, target_b, _, lam = mixup_data(patches, labels, mix_alpha)
+                preds = interp(model(patches))
+                loss = loss_fn(preds, target_a) * lam + loss_fn(preds, target_b) * (1. - lam)
+            elif r < mixup_prob + cutmix_prob:
+                patches, target_a, target_b, _, lam = cutmix_data(patches, labels, mix_alpha)
+                preds = interp(model(patches))
+                loss = loss_fn(preds, target_a) * lam + loss_fn(preds, target_b) * (1. - lam)
+            else:
+                preds = interp(model(patches))
+                loss = loss_fn(preds, labels)
+            # --------------------------
 
             # Batch metrics
             _, pred_labels = torch.max(preds, 1)
@@ -246,6 +285,12 @@ def main():
     parser.add_argument('--data_dir', type=str)
     parser.add_argument('--experiment_name', type=str)
     parser.add_argument('--seed', type=int)
+    parser.add_argument('--random_split', action='store_true', default=None)
+    parser.add_argument('--mixup', type=float)
+    parser.add_argument('--cutmix', type=float)
+    parser.add_argument('--mix_alpha', type=float)
+    parser.add_argument('--aerosol_aug_prob', type=float)
+    parser.add_argument('--aerosol_channel', type=int)
     args = parser.parse_args()
 
     overrides = {k: v for k, v in vars(args).items() if k != 'config' and v is not None}

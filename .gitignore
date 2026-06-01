@@ -10,7 +10,9 @@ experiments/slurm-*.out
 
 # Python
 __pycache__/
+/utils/__pycache__
 *.py[cod]
+*.pyc
 *.pyo
 .env
 venv/
@@ -21,6 +23,7 @@ venv/
 
 # Data (not stored in repo)
 ../Sen2Fire/
+/local_files
 
 # OS
 .DS_Store
