@@ -1,0 +1,5 @@
+h5py
+hdf5plugin
+huggingface_hub
+numpy
+tqdm
