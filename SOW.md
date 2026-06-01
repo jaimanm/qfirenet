@@ -279,8 +279,8 @@ When committing experiment results, include everything **except** `.pth` files (
 
 #### Model Weight Storage Protocol
 Because `.pth` files are too large for standard GitHub tracking, we store them externally in Google Drive. Whenever a new experiment run is completed and deemed useful, the author must:
-1. Rename the local `.pth` file to include the experiment directory name to avoid naming collisions: `<experiment_name>_<MMDD_HHMM>_best_model.pth`.
-2. Upload the renamed file to the shared `QFireNet_Weights` Google Drive folder.
+1. Locate the `.pth` file in the experiment directory (it is automatically saved as `<experiment_name>_<MMDD_HHMM>_best_model.pth`).
+2. Upload this file to the shared `QFireNet_Weights` Google Drive folder.
 3. Include the Google Drive link to the uploaded weight file in your PR description.
 ## 8. Notebooks
 
