@@ -82,6 +82,7 @@ class Sen2FireDataSet(data.Dataset):
         self.mode = mode
         self.augment = augment
         self.img_ids = [i_id.strip() for i_id in open(list_path)]
+        self._fire_presence_flags = None
 
         self.files = []
 
@@ -94,6 +95,16 @@ class Sen2FireDataSet(data.Dataset):
         
     def __len__(self):
         return len(self.files)
+
+    def get_fire_presence_flags(self):
+        """Return a cached list indicating whether each patch contains fire."""
+        if self._fire_presence_flags is None:
+            fire_presence_flags = []
+            for datafiles in tqdm(self.files, desc="Scanning train split fire labels", leave=False):
+                with np.load(datafiles["patch"]) as patch_data:
+                    fire_presence_flags.append(bool(np.any(patch_data["label"])))
+            self._fire_presence_flags = fire_presence_flags
+        return self._fire_presence_flags
 
     def __getitem__(self, index):
         # Get item by index
