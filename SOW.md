@@ -260,6 +260,9 @@ sbatch scripts/submit_test.sh --config configs/your_config.yaml \
     --restore_from experiments/<run_dir>/best_model.pth
 ```
 
+> **Note on SLURM Scripts (`submit_train.sh`, `submit_test.sh`):**
+> These scripts act as generic templates for the project. Please do **not** commit your local environment-specific modifications (like changing `#SBATCH` partition directives or `module load` commands) to these scripts when opening a PR. Always revert them to the `main` branch template before pushing, to prevent constant merge conflicts.
+
 ### Experiment output
 
 Every training run creates:
