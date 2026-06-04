@@ -1,0 +1,43 @@
+# FPN U-Net spectral ablation: SWIR only, no aerosol channel (mode 4)
+#
+# Tests whether removing the problematic aerosol channel (Channel 3)
+# improves generalization to the test set, where aerosol values are
+# 5.3x higher than in training (mean 0.27 vs 1.42). By dropping the
+# channel entirely the model cannot be distracted or misled by it.
+#
+# Compare Test Fire F1 / Recall against fpn_unet_baseline (mode 5)
+# to determine whether aerosol is net-harmful at test time.
+
+model: fpn_unet
+mode: 4
+n_classes: 2
+
+# Training
+epochs: 5
+batch_size: 8
+test_batch_size: 8
+val_batch_size: 1
+learning_rate: 1.0e-4
+weight_decay: 5.0e-4
+seed: 1234
+
+# Loss
+loss: cross_entropy
+fire_class_weight: 10
+
+# FPN
+fpn_out_channels: 128
+
+# Augmentation
+mixup: 0.3
+cutmix: 0.3
+mix_alpha: 0.2
+
+# Data
+data_dir: ../Sen2Fire/
+train_list: ./dataset/train.txt
+val_list: ./dataset/val.txt
+test_list: ./dataset/test.txt
+
+# Output
+experiment_name: fpn_spectral_ablation

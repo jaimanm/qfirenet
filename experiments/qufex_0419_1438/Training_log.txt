@@ -1,0 +1,23 @@
+Config: qufex
+Model: qufex_unet | Mode: 5 (swir_aerosol)
+Output: experiments/qufex_0419_1438
+Train: 92 batches | Val: 504 | Test: 11
+
+--- Epoch 1/25 ---
+  Iter 10/92 | Loss: 0.5669 | OA: 0.8600 | mIoU: 0.4300 | Time: 28.64s
+  Iter 20/92 | Loss: 0.4674 | OA: 0.9410 | mIoU: 0.4718 | Time: 30.28s
+  Iter 30/92 | Loss: 0.5089 | OA: 0.9091 | mIoU: 0.4595 | Time: 30.50s
+  Iter 40/92 | Loss: 0.4519 | OA: 0.9761 | mIoU: 0.4881 | Time: 31.07s
+  Iter 50/92 | Loss: 0.4420 | OA: 0.9160 | mIoU: 0.4580 | Time: 30.01s
+  Iter 60/92 | Loss: 0.4502 | OA: 0.9087 | mIoU: 0.4580 | Time: 29.97s
+  Iter 70/92 | Loss: 0.5493 | OA: 0.8789 | mIoU: 0.4585 | Time: 29.94s
+  Iter 80/92 | Loss: 0.5578 | OA: 0.8748 | mIoU: 0.4508 | Time: 30.15s
+  Iter 90/92 | Loss: 0.3531 | OA: 0.9848 | mIoU: 0.5017 | Time: 30.04s
+Validating...
+  Val OA: 82.33% | Fire F1: 19.28% | Fire IoU: 10.67% | mIoU: 46.31%
+  New best model! Saving checkpoint...
+
+--- Epoch 2/25 ---
+  Iter 10/92 | Loss: 0.3871 | OA: 0.9704 | mIoU: 0.4852 | Time: 30.13s
+  Iter 20/92 | Loss: 0.2025 | OA: 0.9982 | mIoU: 0.4991 | Time: 30.79s
+  Iter 30/92 | Loss: 0.7942 | OA: 0.7742 | mIoU: 0.3871 | Time: 30.10s

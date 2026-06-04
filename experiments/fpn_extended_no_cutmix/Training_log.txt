@@ -1,0 +1,342 @@
+Config: fpn_ablation_extended
+Model: fpn_unet | Mode: 4 (swir)
+Output: experiments/fpn_ablation_extended_0426_1621
+Train: 183 batches | Val: 504 | Test: 63
+
+--- Epoch 1/15 ---
+  Iter 10/183 | Loss: 0.6557 | OA: 0.9554 | mIoU: 0.4901 | Time: 0.23s
+  Iter 20/183 | Loss: 0.1803 | OA: 0.9850 | mIoU: 0.4944 | Time: 0.24s
+  Iter 30/183 | Loss: 0.5392 | OA: 0.7422 | mIoU: 0.3711 | Time: 0.24s
+  Iter 40/183 | Loss: 0.3206 | OA: 0.9522 | mIoU: 0.4761 | Time: 0.25s
+  Iter 50/183 | Loss: 0.2258 | OA: 0.9512 | mIoU: 0.4756 | Time: 0.25s
+  Iter 60/183 | Loss: 0.1870 | OA: 0.9645 | mIoU: 0.4823 | Time: 0.24s
+  Iter 70/183 | Loss: 0.0989 | OA: 0.9987 | mIoU: 0.4994 | Time: 0.24s
+  Iter 80/183 | Loss: 0.0863 | OA: 0.9931 | mIoU: 0.4965 | Time: 0.21s
+  Iter 90/183 | Loss: 0.2184 | OA: 0.9727 | mIoU: 0.4863 | Time: 0.24s
+  Iter 100/183 | Loss: 0.5604 | OA: 0.9722 | mIoU: 0.4864 | Time: 0.24s
+  Iter 110/183 | Loss: 0.4958 | OA: 0.9278 | mIoU: 0.4961 | Time: 0.24s
+  Iter 120/183 | Loss: 0.6432 | OA: 0.9470 | mIoU: 0.4939 | Time: 0.25s
+  Iter 130/183 | Loss: 0.2575 | OA: 0.9835 | mIoU: 0.5057 | Time: 0.25s
+  Iter 140/183 | Loss: 0.6861 | OA: 0.9241 | mIoU: 0.4891 | Time: 0.20s
+  Iter 150/183 | Loss: 0.1866 | OA: 0.9900 | mIoU: 0.4950 | Time: 0.24s
+  Iter 160/183 | Loss: 0.4631 | OA: 0.9621 | mIoU: 0.4932 | Time: 0.13s
+  Iter 170/183 | Loss: 0.1358 | OA: 0.9882 | mIoU: 0.4941 | Time: 0.23s
+  Iter 180/183 | Loss: 0.9068 | OA: 0.9176 | mIoU: 0.4857 | Time: 0.23s
+Validating...
+  Val OA: 89.52% | Fire F1: 21.73% | Fire IoU: 12.19% | mIoU: 50.78%
+  New best model! Saving checkpoint...
+
+--- Epoch 2/15 ---
+  Iter 10/183 | Loss: 0.2363 | OA: 0.9659 | mIoU: 0.5231 | Time: 0.24s
+  Iter 20/183 | Loss: 0.0405 | OA: 0.9888 | mIoU: 0.4944 | Time: 0.24s
+  Iter 30/183 | Loss: 1.2415 | OA: 0.9542 | mIoU: 0.4771 | Time: 0.24s
+  Iter 40/183 | Loss: 0.1558 | OA: 0.9914 | mIoU: 0.4957 | Time: 0.13s
+  Iter 50/183 | Loss: 0.2224 | OA: 0.9696 | mIoU: 0.4861 | Time: 0.13s
+  Iter 60/183 | Loss: 0.4951 | OA: 0.8961 | mIoU: 0.4657 | Time: 0.14s
+  Iter 70/183 | Loss: 0.0708 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.15s
+  Iter 80/183 | Loss: 0.5233 | OA: 0.9868 | mIoU: 0.4934 | Time: 0.14s
+  Iter 90/183 | Loss: 0.7958 | OA: 0.9127 | mIoU: 0.4857 | Time: 0.23s
+  Iter 100/183 | Loss: 0.3131 | OA: 0.9783 | mIoU: 0.4892 | Time: 0.23s
+  Iter 110/183 | Loss: 0.6286 | OA: 0.9346 | mIoU: 0.4787 | Time: 0.22s
+  Iter 120/183 | Loss: 0.0750 | OA: 0.9990 | mIoU: 0.4995 | Time: 0.18s
+  Iter 130/183 | Loss: 0.0975 | OA: 0.9792 | mIoU: 0.4896 | Time: 0.21s
+  Iter 140/183 | Loss: 0.4555 | OA: 0.9428 | mIoU: 0.4913 | Time: 0.24s
+  Iter 150/183 | Loss: 0.2301 | OA: 0.9871 | mIoU: 0.4973 | Time: 0.23s
+  Iter 160/183 | Loss: 0.5820 | OA: 0.9706 | mIoU: 0.4978 | Time: 0.23s
+  Iter 170/183 | Loss: 0.3475 | OA: 0.9863 | mIoU: 0.4931 | Time: 0.26s
+  Iter 180/183 | Loss: 0.2073 | OA: 0.9723 | mIoU: 0.5172 | Time: 0.23s
+Validating...
+  Val OA: 91.73% | Fire F1: 30.66% | Fire IoU: 18.11% | mIoU: 54.84%
+  New best model! Saving checkpoint...
+
+--- Epoch 3/15 ---
+  Iter 10/183 | Loss: 0.4815 | OA: 0.9420 | mIoU: 0.4901 | Time: 0.25s
+  Iter 20/183 | Loss: 0.1500 | OA: 0.9902 | mIoU: 0.5258 | Time: 0.23s
+  Iter 30/183 | Loss: 0.0478 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.27s
+  Iter 40/183 | Loss: 0.1436 | OA: 0.9959 | mIoU: 0.4980 | Time: 0.27s
+  Iter 50/183 | Loss: 0.3074 | OA: 0.9074 | mIoU: 0.4537 | Time: 0.12s
+  Iter 60/183 | Loss: 0.8567 | OA: 0.8506 | mIoU: 0.4254 | Time: 0.12s
+  Iter 70/183 | Loss: 0.3469 | OA: 0.9370 | mIoU: 0.4897 | Time: 0.12s
+  Iter 80/183 | Loss: 0.5007 | OA: 0.9665 | mIoU: 0.5068 | Time: 0.12s
+  Iter 90/183 | Loss: 0.3511 | OA: 0.8257 | mIoU: 0.4128 | Time: 0.12s
+  Iter 100/183 | Loss: 0.1862 | OA: 0.9853 | mIoU: 0.5006 | Time: 0.19s
+  Iter 110/183 | Loss: 0.6626 | OA: 0.9292 | mIoU: 0.4760 | Time: 0.12s
+  Iter 120/183 | Loss: 0.2147 | OA: 0.9951 | mIoU: 0.4975 | Time: 0.13s
+  Iter 130/183 | Loss: 0.0675 | OA: 0.9988 | mIoU: 0.4994 | Time: 0.13s
+  Iter 140/183 | Loss: 0.0911 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.12s
+  Iter 150/183 | Loss: 0.2128 | OA: 0.9126 | mIoU: 0.4563 | Time: 0.13s
+  Iter 160/183 | Loss: 0.1385 | OA: 0.9815 | mIoU: 0.5384 | Time: 0.12s
+  Iter 170/183 | Loss: 0.2986 | OA: 0.9808 | mIoU: 0.4981 | Time: 0.13s
+  Iter 180/183 | Loss: 0.0651 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.12s
+Validating...
+  Val OA: 88.38% | Fire F1: 25.64% | Fire IoU: 14.71% | mIoU: 51.42%
+
+--- Epoch 4/15 ---
+  Iter 10/183 | Loss: 0.0367 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.25s
+  Iter 20/183 | Loss: 0.0392 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.24s
+  Iter 30/183 | Loss: 0.0501 | OA: 0.9854 | mIoU: 0.4927 | Time: 0.25s
+  Iter 40/183 | Loss: 0.1338 | OA: 0.9930 | mIoU: 0.5428 | Time: 0.12s
+  Iter 50/183 | Loss: 0.1113 | OA: 0.9920 | mIoU: 0.4960 | Time: 0.15s
+  Iter 60/183 | Loss: 0.1798 | OA: 0.9703 | mIoU: 0.4852 | Time: 0.12s
+  Iter 70/183 | Loss: 0.9998 | OA: 0.8315 | mIoU: 0.4371 | Time: 0.15s
+  Iter 80/183 | Loss: 0.1330 | OA: 0.9998 | mIoU: 0.4999 | Time: 0.13s
+  Iter 90/183 | Loss: 0.6362 | OA: 0.9571 | mIoU: 0.4972 | Time: 0.12s
+  Iter 100/183 | Loss: 0.1940 | OA: 0.9400 | mIoU: 0.4764 | Time: 0.24s
+  Iter 110/183 | Loss: 0.4234 | OA: 0.9717 | mIoU: 0.5043 | Time: 0.20s
+  Iter 120/183 | Loss: 0.3776 | OA: 0.9854 | mIoU: 0.4927 | Time: 0.12s
+  Iter 130/183 | Loss: 0.4732 | OA: 0.9589 | mIoU: 0.4818 | Time: 0.13s
+  Iter 140/183 | Loss: 0.0543 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.13s
+  Iter 150/183 | Loss: 0.0591 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.24s
+  Iter 160/183 | Loss: 0.4742 | OA: 0.9376 | mIoU: 0.4717 | Time: 0.25s
+  Iter 170/183 | Loss: 0.1265 | OA: 0.9614 | mIoU: 0.4807 | Time: 0.24s
+  Iter 180/183 | Loss: 0.2416 | OA: 0.9912 | mIoU: 0.5125 | Time: 0.24s
+Validating...
+  Val OA: 87.17% | Fire F1: 25.05% | Fire IoU: 14.32% | mIoU: 50.60%
+
+--- Epoch 5/15 ---
+  Iter 10/183 | Loss: 0.1149 | OA: 0.9975 | mIoU: 0.5036 | Time: 0.20s
+  Iter 20/183 | Loss: 0.3531 | OA: 0.9355 | mIoU: 0.4787 | Time: 0.24s
+  Iter 30/183 | Loss: 0.2991 | OA: 0.9781 | mIoU: 0.5244 | Time: 0.21s
+  Iter 40/183 | Loss: 0.3133 | OA: 0.8718 | mIoU: 0.4406 | Time: 0.20s
+  Iter 50/183 | Loss: 0.0734 | OA: 0.9988 | mIoU: 0.4994 | Time: 0.12s
+  Iter 60/183 | Loss: 0.4852 | OA: 0.9434 | mIoU: 0.4717 | Time: 0.24s
+  Iter 70/183 | Loss: 0.0968 | OA: 0.9975 | mIoU: 0.4987 | Time: 0.26s
+  Iter 80/183 | Loss: 0.0774 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.24s
+  Iter 90/183 | Loss: 0.6798 | OA: 0.7966 | mIoU: 0.4172 | Time: 0.17s
+  Iter 100/183 | Loss: 0.0566 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.18s
+  Iter 110/183 | Loss: 0.2578 | OA: 0.9828 | mIoU: 0.5300 | Time: 0.24s
+  Iter 120/183 | Loss: 0.1781 | OA: 0.9479 | mIoU: 0.4740 | Time: 0.23s
+  Iter 130/183 | Loss: 0.1220 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.19s
+  Iter 140/183 | Loss: 0.3289 | OA: 0.8321 | mIoU: 0.4264 | Time: 0.24s
+  Iter 150/183 | Loss: 0.2488 | OA: 0.9894 | mIoU: 0.4947 | Time: 0.24s
+  Iter 160/183 | Loss: 0.5244 | OA: 0.9597 | mIoU: 0.5010 | Time: 0.24s
+  Iter 170/183 | Loss: 0.2647 | OA: 0.9673 | mIoU: 0.5182 | Time: 0.21s
+  Iter 180/183 | Loss: 0.0613 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.24s
+Validating...
+  Val OA: 90.16% | Fire F1: 28.75% | Fire IoU: 16.79% | mIoU: 53.38%
+
+--- Epoch 6/15 ---
+  Iter 10/183 | Loss: 0.1208 | OA: 0.9677 | mIoU: 0.4839 | Time: 0.25s
+  Iter 20/183 | Loss: 0.2827 | OA: 0.8607 | mIoU: 0.4458 | Time: 0.24s
+  Iter 30/183 | Loss: 0.3504 | OA: 0.9593 | mIoU: 0.5017 | Time: 0.24s
+  Iter 40/183 | Loss: 0.4216 | OA: 0.8675 | mIoU: 0.4337 | Time: 0.19s
+  Iter 50/183 | Loss: 0.0611 | OA: 0.9997 | mIoU: 0.4999 | Time: 0.23s
+  Iter 60/183 | Loss: 0.8368 | OA: 0.8988 | mIoU: 0.4519 | Time: 0.24s
+  Iter 70/183 | Loss: 0.5630 | OA: 0.9259 | mIoU: 0.4629 | Time: 0.25s
+  Iter 80/183 | Loss: 0.1017 | OA: 0.9859 | mIoU: 0.4929 | Time: 0.12s
+  Iter 90/183 | Loss: 0.0807 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.15s
+  Iter 100/183 | Loss: 0.1574 | OA: 0.9941 | mIoU: 0.4982 | Time: 0.12s
+  Iter 110/183 | Loss: 0.2536 | OA: 0.9888 | mIoU: 0.5145 | Time: 0.23s
+  Iter 120/183 | Loss: 0.1424 | OA: 0.9638 | mIoU: 0.4819 | Time: 0.24s
+  Iter 130/183 | Loss: 0.1679 | OA: 0.9356 | mIoU: 0.4678 | Time: 0.23s
+  Iter 140/183 | Loss: 0.2562 | OA: 0.8870 | mIoU: 0.4435 | Time: 0.24s
+  Iter 150/183 | Loss: 0.2029 | OA: 0.9821 | mIoU: 0.5044 | Time: 0.26s
+  Iter 160/183 | Loss: 0.3956 | OA: 0.9683 | mIoU: 0.5442 | Time: 0.25s
+  Iter 170/183 | Loss: 0.1783 | OA: 0.9820 | mIoU: 0.5096 | Time: 0.13s
+  Iter 180/183 | Loss: 0.3170 | OA: 0.9593 | mIoU: 0.5203 | Time: 0.16s
+Validating...
+  Val OA: 94.77% | Fire F1: 40.87% | Fire IoU: 25.68% | mIoU: 60.18%
+  New best model! Saving checkpoint...
+
+--- Epoch 7/15 ---
+  Iter 10/183 | Loss: 0.0461 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.25s
+  Iter 20/183 | Loss: 0.1055 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.24s
+  Iter 30/183 | Loss: 0.1455 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.23s
+  Iter 40/183 | Loss: 0.4207 | OA: 0.9687 | mIoU: 0.4844 | Time: 0.24s
+  Iter 50/183 | Loss: 0.2017 | OA: 0.9786 | mIoU: 0.5240 | Time: 0.23s
+  Iter 60/183 | Loss: 0.1354 | OA: 0.9975 | mIoU: 0.4987 | Time: 0.24s
+  Iter 70/183 | Loss: 0.3386 | OA: 0.9868 | mIoU: 0.4934 | Time: 0.20s
+  Iter 80/183 | Loss: 0.0983 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.24s
+  Iter 90/183 | Loss: 0.1093 | OA: 0.9826 | mIoU: 0.5057 | Time: 0.24s
+  Iter 100/183 | Loss: 0.1363 | OA: 0.9875 | mIoU: 0.4938 | Time: 0.24s
+  Iter 110/183 | Loss: 0.1355 | OA: 0.9920 | mIoU: 0.5407 | Time: 0.26s
+  Iter 120/183 | Loss: 0.3373 | OA: 0.9566 | mIoU: 0.4970 | Time: 0.12s
+  Iter 130/183 | Loss: 0.0521 | OA: 0.9940 | mIoU: 0.4970 | Time: 0.19s
+  Iter 140/183 | Loss: 0.2423 | OA: 0.9185 | mIoU: 0.4593 | Time: 0.13s
+  Iter 150/183 | Loss: 0.0420 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.12s
+  Iter 160/183 | Loss: 0.1139 | OA: 0.9844 | mIoU: 0.5173 | Time: 0.12s
+  Iter 170/183 | Loss: 0.1478 | OA: 0.9262 | mIoU: 0.4631 | Time: 0.12s
+  Iter 180/183 | Loss: 0.1905 | OA: 0.9812 | mIoU: 0.5215 | Time: 0.12s
+Validating...
+  Val OA: 82.91% | Fire F1: 21.90% | Fire IoU: 12.29% | mIoU: 47.39%
+
+--- Epoch 8/15 ---
+  Iter 10/183 | Loss: 0.1123 | OA: 0.9877 | mIoU: 0.4938 | Time: 0.24s
+  Iter 20/183 | Loss: 0.0839 | OA: 0.9890 | mIoU: 0.4945 | Time: 0.13s
+  Iter 30/183 | Loss: 0.9214 | OA: 0.9093 | mIoU: 0.4546 | Time: 0.17s
+  Iter 40/183 | Loss: 0.1284 | OA: 0.9705 | mIoU: 0.4865 | Time: 0.24s
+  Iter 50/183 | Loss: 1.1391 | OA: 0.9603 | mIoU: 0.4801 | Time: 0.13s
+  Iter 60/183 | Loss: 0.4753 | OA: 0.9320 | mIoU: 0.4712 | Time: 0.24s
+  Iter 70/183 | Loss: 0.1339 | OA: 0.9582 | mIoU: 0.4798 | Time: 0.27s
+  Iter 80/183 | Loss: 0.1438 | OA: 0.9819 | mIoU: 0.4919 | Time: 0.24s
+  Iter 90/183 | Loss: 0.0607 | OA: 0.9956 | mIoU: 0.4978 | Time: 0.24s
+  Iter 100/183 | Loss: 0.1108 | OA: 0.9676 | mIoU: 0.4838 | Time: 0.24s
+  Iter 110/183 | Loss: 0.0700 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.24s
+  Iter 120/183 | Loss: 0.2428 | OA: 0.9457 | mIoU: 0.4767 | Time: 0.20s
+  Iter 130/183 | Loss: 0.3567 | OA: 0.9782 | mIoU: 0.5252 | Time: 0.24s
+  Iter 140/183 | Loss: 0.0828 | OA: 0.9846 | mIoU: 0.4923 | Time: 0.24s
+  Iter 150/183 | Loss: 0.1265 | OA: 0.9914 | mIoU: 0.5223 | Time: 0.25s
+  Iter 160/183 | Loss: 0.3608 | OA: 0.9746 | mIoU: 0.4873 | Time: 0.25s
+  Iter 170/183 | Loss: 0.1525 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.24s
+  Iter 180/183 | Loss: 0.0992 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.25s
+Validating...
+  Val OA: 86.99% | Fire F1: 25.66% | Fire IoU: 14.72% | mIoU: 50.71%
+
+--- Epoch 9/15 ---
+  Iter 10/183 | Loss: 0.2728 | OA: 0.9823 | mIoU: 0.4947 | Time: 0.24s
+  Iter 20/183 | Loss: 0.0475 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.24s
+  Iter 30/183 | Loss: 0.0486 | OA: 0.9940 | mIoU: 0.4970 | Time: 0.24s
+  Iter 40/183 | Loss: 0.5374 | OA: 0.9550 | mIoU: 0.5343 | Time: 0.24s
+  Iter 50/183 | Loss: 0.2173 | OA: 0.9760 | mIoU: 0.5006 | Time: 0.25s
+  Iter 60/183 | Loss: 0.1582 | OA: 0.9762 | mIoU: 0.4881 | Time: 0.20s
+  Iter 70/183 | Loss: 0.4282 | OA: 0.9839 | mIoU: 0.4920 | Time: 0.24s
+  Iter 80/183 | Loss: 0.0589 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.21s
+  Iter 90/183 | Loss: 0.3551 | OA: 0.9544 | mIoU: 0.5170 | Time: 0.12s
+  Iter 100/183 | Loss: 0.3838 | OA: 0.9004 | mIoU: 0.4533 | Time: 0.12s
+  Iter 110/183 | Loss: 0.3515 | OA: 0.9832 | mIoU: 0.4916 | Time: 0.14s
+  Iter 120/183 | Loss: 0.0713 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.24s
+  Iter 130/183 | Loss: 0.0867 | OA: 0.9861 | mIoU: 0.4930 | Time: 0.25s
+  Iter 140/183 | Loss: 0.0973 | OA: 0.9986 | mIoU: 0.4993 | Time: 0.24s
+  Iter 150/183 | Loss: 0.4436 | OA: 0.9390 | mIoU: 0.4695 | Time: 0.24s
+  Iter 160/183 | Loss: 0.0287 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.24s
+  Iter 170/183 | Loss: 0.1004 | OA: 0.9781 | mIoU: 0.4891 | Time: 0.24s
+  Iter 180/183 | Loss: 0.0522 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.25s
+Validating...
+  Val OA: 92.20% | Fire F1: 26.59% | Fire IoU: 15.33% | mIoU: 53.71%
+
+--- Epoch 10/15 ---
+  Iter 10/183 | Loss: 0.0551 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.25s
+  Iter 20/183 | Loss: 0.7761 | OA: 0.9607 | mIoU: 0.4969 | Time: 0.24s
+  Iter 30/183 | Loss: 0.2446 | OA: 0.9471 | mIoU: 0.5224 | Time: 0.23s
+  Iter 40/183 | Loss: 0.0596 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.24s
+  Iter 50/183 | Loss: 0.2177 | OA: 0.9391 | mIoU: 0.4779 | Time: 0.12s
+  Iter 60/183 | Loss: 0.0834 | OA: 0.9938 | mIoU: 0.4969 | Time: 0.14s
+  Iter 70/183 | Loss: 0.0553 | OA: 0.9916 | mIoU: 0.4958 | Time: 0.14s
+  Iter 80/183 | Loss: 0.0342 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.15s
+  Iter 90/183 | Loss: 0.6473 | OA: 0.9749 | mIoU: 0.5179 | Time: 0.23s
+  Iter 100/183 | Loss: 0.2336 | OA: 0.9994 | mIoU: 0.4997 | Time: 0.25s
+  Iter 110/183 | Loss: 0.1100 | OA: 0.9831 | mIoU: 0.4916 | Time: 0.21s
+  Iter 120/183 | Loss: 0.0790 | OA: 0.9999 | mIoU: 0.4999 | Time: 0.24s
+  Iter 130/183 | Loss: 0.2235 | OA: 0.9951 | mIoU: 0.4975 | Time: 0.24s
+  Iter 140/183 | Loss: 0.1154 | OA: 0.9824 | mIoU: 0.5193 | Time: 0.24s
+  Iter 150/183 | Loss: 0.4966 | OA: 0.9081 | mIoU: 0.4788 | Time: 0.16s
+  Iter 160/183 | Loss: 0.3088 | OA: 0.9869 | mIoU: 0.5020 | Time: 0.25s
+  Iter 170/183 | Loss: 0.4447 | OA: 0.8417 | mIoU: 0.4208 | Time: 0.24s
+  Iter 180/183 | Loss: 0.0747 | OA: 0.9900 | mIoU: 0.4950 | Time: 0.23s
+Validating...
+  Val OA: 83.29% | Fire F1: 22.37% | Fire IoU: 12.59% | mIoU: 47.74%
+
+--- Epoch 11/15 ---
+  Iter 10/183 | Loss: 0.1265 | OA: 0.9547 | mIoU: 0.4794 | Time: 0.20s
+  Iter 20/183 | Loss: 0.2712 | OA: 0.9900 | mIoU: 0.4950 | Time: 0.24s
+  Iter 30/183 | Loss: 0.2372 | OA: 0.9030 | mIoU: 0.4567 | Time: 0.24s
+  Iter 40/183 | Loss: 0.0460 | OA: 0.9999 | mIoU: 0.5000 | Time: 0.22s
+  Iter 50/183 | Loss: 0.0410 | OA: 0.9997 | mIoU: 0.4999 | Time: 0.24s
+  Iter 60/183 | Loss: 0.0942 | OA: 0.9932 | mIoU: 0.5233 | Time: 0.19s
+  Iter 70/183 | Loss: 0.0198 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.20s
+  Iter 80/183 | Loss: 0.2484 | OA: 0.9871 | mIoU: 0.4948 | Time: 0.24s
+  Iter 90/183 | Loss: 0.4608 | OA: 0.9147 | mIoU: 0.4819 | Time: 0.22s
+  Iter 100/183 | Loss: 0.2339 | OA: 0.9850 | mIoU: 0.4971 | Time: 0.25s
+  Iter 110/183 | Loss: 0.2183 | OA: 0.9893 | mIoU: 0.4956 | Time: 0.24s
+  Iter 120/183 | Loss: 0.0781 | OA: 0.9997 | mIoU: 0.4998 | Time: 0.23s
+  Iter 130/183 | Loss: 0.2801 | OA: 0.9747 | mIoU: 0.4873 | Time: 0.24s
+  Iter 140/183 | Loss: 0.9648 | OA: 0.9074 | mIoU: 0.4549 | Time: 0.24s
+  Iter 150/183 | Loss: 0.0690 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.21s
+  Iter 160/183 | Loss: 0.0457 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.26s
+  Iter 170/183 | Loss: 1.0434 | OA: 0.9340 | mIoU: 0.4670 | Time: 0.20s
+  Iter 180/183 | Loss: 0.4303 | OA: 0.8569 | mIoU: 0.4745 | Time: 0.26s
+Validating...
+  Val OA: 84.18% | Fire F1: 22.36% | Fire IoU: 12.59% | mIoU: 48.20%
+
+--- Epoch 12/15 ---
+  Iter 10/183 | Loss: 0.2028 | OA: 0.9393 | mIoU: 0.4779 | Time: 0.24s
+  Iter 20/183 | Loss: 0.0782 | OA: 0.9706 | mIoU: 0.4853 | Time: 0.24s
+  Iter 30/183 | Loss: 0.1785 | OA: 0.9963 | mIoU: 0.4981 | Time: 0.25s
+  Iter 40/183 | Loss: 0.2785 | OA: 0.9327 | mIoU: 0.4664 | Time: 0.23s
+  Iter 50/183 | Loss: 0.3839 | OA: 0.9708 | mIoU: 0.5131 | Time: 0.25s
+  Iter 60/183 | Loss: 0.0858 | OA: 0.9938 | mIoU: 0.4969 | Time: 0.25s
+  Iter 70/183 | Loss: 0.7937 | OA: 0.6547 | mIoU: 0.3633 | Time: 0.20s
+  Iter 80/183 | Loss: 0.1468 | OA: 0.9997 | mIoU: 0.4999 | Time: 0.24s
+  Iter 90/183 | Loss: 0.4250 | OA: 0.9013 | mIoU: 0.4757 | Time: 0.24s
+  Iter 100/183 | Loss: 0.2301 | OA: 0.9493 | mIoU: 0.4748 | Time: 0.24s
+  Iter 110/183 | Loss: 0.2967 | OA: 0.8412 | mIoU: 0.4343 | Time: 0.24s
+  Iter 120/183 | Loss: 0.1248 | OA: 0.9589 | mIoU: 0.4794 | Time: 0.23s
+  Iter 130/183 | Loss: 0.1724 | OA: 0.9786 | mIoU: 0.5243 | Time: 0.24s
+  Iter 140/183 | Loss: 0.0225 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.12s
+  Iter 150/183 | Loss: 0.0242 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.15s
+  Iter 160/183 | Loss: 0.1039 | OA: 0.9670 | mIoU: 0.4923 | Time: 0.24s
+  Iter 170/183 | Loss: 0.3610 | OA: 0.9834 | mIoU: 0.4948 | Time: 0.23s
+  Iter 180/183 | Loss: 0.2310 | OA: 0.9671 | mIoU: 0.4836 | Time: 0.22s
+Validating...
+  Val OA: 92.46% | Fire F1: 35.38% | Fire IoU: 21.49% | mIoU: 56.89%
+
+--- Epoch 13/15 ---
+  Iter 10/183 | Loss: 0.0821 | OA: 0.9992 | mIoU: 0.4996 | Time: 0.22s
+  Iter 20/183 | Loss: 0.8349 | OA: 0.9485 | mIoU: 0.5050 | Time: 0.25s
+  Iter 30/183 | Loss: 0.0454 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.26s
+  Iter 40/183 | Loss: 0.4586 | OA: 0.9412 | mIoU: 0.4706 | Time: 0.24s
+  Iter 50/183 | Loss: 0.0821 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.27s
+  Iter 60/183 | Loss: 0.0499 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.25s
+  Iter 70/183 | Loss: 0.0633 | OA: 0.9997 | mIoU: 0.4998 | Time: 0.24s
+  Iter 80/183 | Loss: 0.3607 | OA: 0.9814 | mIoU: 0.4907 | Time: 0.23s
+  Iter 90/183 | Loss: 0.1366 | OA: 0.9364 | mIoU: 0.4682 | Time: 0.24s
+  Iter 100/183 | Loss: 0.0508 | OA: 0.9999 | mIoU: 0.5000 | Time: 0.13s
+  Iter 110/183 | Loss: 0.0413 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.13s
+  Iter 120/183 | Loss: 0.0715 | OA: 0.9984 | mIoU: 0.4992 | Time: 0.26s
+  Iter 130/183 | Loss: 0.1872 | OA: 0.9223 | mIoU: 0.4651 | Time: 0.12s
+  Iter 140/183 | Loss: 0.9481 | OA: 0.8999 | mIoU: 0.4499 | Time: 0.15s
+  Iter 150/183 | Loss: 0.1942 | OA: 0.9959 | mIoU: 0.4979 | Time: 0.24s
+  Iter 160/183 | Loss: 0.3361 | OA: 0.8466 | mIoU: 0.4233 | Time: 0.24s
+  Iter 170/183 | Loss: 0.0612 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.24s
+  Iter 180/183 | Loss: 0.2092 | OA: 0.9769 | mIoU: 0.5232 | Time: 0.13s
+Validating...
+  Val OA: 88.94% | Fire F1: 28.48% | Fire IoU: 16.61% | mIoU: 52.65%
+
+--- Epoch 14/15 ---
+  Iter 10/183 | Loss: 0.4697 | OA: 0.9633 | mIoU: 0.5036 | Time: 0.24s
+  Iter 20/183 | Loss: 0.0655 | OA: 0.9998 | mIoU: 0.4999 | Time: 0.24s
+  Iter 30/183 | Loss: 0.2258 | OA: 0.9611 | mIoU: 0.4999 | Time: 0.13s
+  Iter 40/183 | Loss: 0.1240 | OA: 0.9529 | mIoU: 0.4764 | Time: 0.24s
+  Iter 50/183 | Loss: 0.0444 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.25s
+  Iter 60/183 | Loss: 0.0404 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.25s
+  Iter 70/183 | Loss: 0.7003 | OA: 0.8885 | mIoU: 0.4545 | Time: 0.13s
+  Iter 80/183 | Loss: 0.8551 | OA: 0.8727 | mIoU: 0.4364 | Time: 0.13s
+  Iter 90/183 | Loss: 0.3486 | OA: 0.9046 | mIoU: 0.4763 | Time: 0.12s
+  Iter 100/183 | Loss: 0.0600 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.14s
+  Iter 110/183 | Loss: 0.1054 | OA: 0.9668 | mIoU: 0.4852 | Time: 0.12s
+  Iter 120/183 | Loss: 0.2411 | OA: 0.9465 | mIoU: 0.5035 | Time: 0.25s
+  Iter 130/183 | Loss: 0.1456 | OA: 0.9423 | mIoU: 0.4711 | Time: 0.14s
+  Iter 140/183 | Loss: 0.1729 | OA: 0.9437 | mIoU: 0.4873 | Time: 0.23s
+  Iter 150/183 | Loss: 0.1344 | OA: 0.9684 | mIoU: 0.4842 | Time: 0.23s
+  Iter 160/183 | Loss: 0.0624 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.24s
+  Iter 170/183 | Loss: 0.0927 | OA: 0.9989 | mIoU: 0.4994 | Time: 0.24s
+  Iter 180/183 | Loss: 0.0594 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.25s
+Validating...
+  Val OA: 80.45% | Fire F1: 20.46% | Fire IoU: 11.40% | mIoU: 45.67%
+
+--- Epoch 15/15 ---
+  Iter 10/183 | Loss: 0.0798 | OA: 0.9867 | mIoU: 0.4933 | Time: 0.24s
+  Iter 20/183 | Loss: 0.3720 | OA: 0.9856 | mIoU: 0.4928 | Time: 0.26s
+  Iter 30/183 | Loss: 0.0846 | OA: 0.9756 | mIoU: 0.4878 | Time: 0.27s
+  Iter 40/183 | Loss: 0.1688 | OA: 0.9990 | mIoU: 0.4995 | Time: 0.27s
+  Iter 50/183 | Loss: 0.1849 | OA: 0.9715 | mIoU: 0.5091 | Time: 0.22s
+  Iter 60/183 | Loss: 0.1156 | OA: 0.9643 | mIoU: 0.4822 | Time: 0.23s
+  Iter 70/183 | Loss: 0.1496 | OA: 0.9956 | mIoU: 0.4978 | Time: 0.24s
+  Iter 80/183 | Loss: 0.1957 | OA: 0.9871 | mIoU: 0.5078 | Time: 0.24s
+  Iter 90/183 | Loss: 0.6715 | OA: 0.8620 | mIoU: 0.4930 | Time: 0.24s
+  Iter 100/183 | Loss: 0.0263 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.21s
+  Iter 110/183 | Loss: 0.0514 | OA: 0.9999 | mIoU: 0.5000 | Time: 0.23s
+  Iter 120/183 | Loss: 0.2096 | OA: 0.9354 | mIoU: 0.4771 | Time: 0.24s
+  Iter 130/183 | Loss: 0.0418 | OA: 0.9999 | mIoU: 0.5000 | Time: 0.24s
+  Iter 140/183 | Loss: 0.0357 | OA: 1.0000 | mIoU: 0.5000 | Time: 0.24s
+  Iter 150/183 | Loss: 0.0896 | OA: 0.9690 | mIoU: 0.4845 | Time: 0.19s
+  Iter 160/183 | Loss: 0.1433 | OA: 0.9960 | mIoU: 0.4980 | Time: 0.25s
+  Iter 170/183 | Loss: 0.1833 | OA: 0.9220 | mIoU: 0.4610 | Time: 0.21s
+  Iter 180/183 | Loss: 0.1974 | OA: 0.9832 | mIoU: 0.5363 | Time: 0.23s
+Validating...
+  Val OA: 86.19% | Fire F1: 25.04% | Fire IoU: 14.31% | mIoU: 50.09%
+
+Testing...
+  Test OA: 93.01% | Fire P: 35.79% | Fire R: 26.37% | Fire F1: 30.37% | Fire IoU: 17.90% | mIoU: 55.40%
+
+Done. Results saved to experiments/fpn_ablation_extended_0426_1621

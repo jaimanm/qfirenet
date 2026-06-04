@@ -1,0 +1,34 @@
+# QB-Net bottleneck (SWIR + aerosol, mode 5)
+# Xu, Zhao & Li (2025) — RY + U3 + CNOT ladder circuit at the bottleneck
+# Mirrors qufex.yaml; only model, quantum, and experiment fields differ.
+
+model: qbnet_unet
+mode: 5 # swir_aerosol
+n_classes: 2
+
+# Quantum bottleneck
+n_qubits: 4 # matching Qu-Net 4(2) for a controlled comparison
+n_layers: 2 # trainable U3 layers inside QB-Net
+circuit: qbnet_circuit
+
+# Training
+epochs: 5
+batch_size: 16
+test_batch_size: 50
+val_batch_size: 1
+learning_rate: 1.0e-4
+weight_decay: 5.0e-4
+seed: 1234
+
+# Loss
+loss: cross_entropy
+fire_class_weight: 10
+
+# Data
+data_dir: ../Sen2Fire/
+train_list: ./dataset/train.txt
+val_list: ./dataset/val.txt
+test_list: ./dataset/test.txt
+
+# Output
+experiment_name: qbnet

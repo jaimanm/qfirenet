@@ -1,0 +1,244 @@
+Config: quantum_fpn_random_split
+Model: quantum_fpn_unet | Mode: 4 (swir)
+Output: experiments/quantum_fpn_random_split_0428_0319
+Train: 432 batches | Val: 369 | Test: 93
+
+--- Epoch 1/5 ---
+  Iter 10/432 | Loss: 0.5245 | OA: 0.9120 | mIoU: 0.4568 | Time: 5.64s
+  Iter 20/432 | Loss: 0.5956 | OA: 0.8459 | mIoU: 0.4291 | Time: 5.75s
+  Iter 30/432 | Loss: nan | OA: 0.8929 | mIoU: 0.4464 | Time: 5.82s
+  Iter 40/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.66s
+  Iter 50/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.79s
+  Iter 60/432 | Loss: nan | OA: 0.9281 | mIoU: 0.4640 | Time: 5.77s
+  Iter 70/432 | Loss: nan | OA: 0.8774 | mIoU: 0.4387 | Time: 5.64s
+  Iter 80/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.76s
+  Iter 90/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.80s
+  Iter 100/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.63s
+  Iter 110/432 | Loss: nan | OA: 0.9385 | mIoU: 0.4693 | Time: 5.81s
+  Iter 120/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.76s
+  Iter 130/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.62s
+  Iter 140/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.74s
+  Iter 150/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.78s
+  Iter 160/432 | Loss: nan | OA: 0.7252 | mIoU: 0.3626 | Time: 5.64s
+  Iter 170/432 | Loss: nan | OA: 0.9443 | mIoU: 0.4722 | Time: 5.79s
+  Iter 180/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.76s
+  Iter 190/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.64s
+  Iter 200/432 | Loss: nan | OA: 0.9968 | mIoU: 0.4984 | Time: 5.75s
+  Iter 210/432 | Loss: nan | OA: 0.9975 | mIoU: 0.4988 | Time: 5.79s
+  Iter 220/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.63s
+  Iter 230/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.77s
+  Iter 240/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.78s
+  Iter 250/432 | Loss: nan | OA: 0.9423 | mIoU: 0.4712 | Time: 5.63s
+  Iter 260/432 | Loss: nan | OA: 0.9563 | mIoU: 0.4782 | Time: 5.74s
+  Iter 270/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.77s
+  Iter 280/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.68s
+  Iter 290/432 | Loss: nan | OA: 0.9019 | mIoU: 0.4510 | Time: 5.76s
+  Iter 300/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.83s
+  Iter 310/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.65s
+  Iter 320/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.76s
+  Iter 330/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.79s
+  Iter 340/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.65s
+  Iter 350/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.76s
+  Iter 360/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.78s
+  Iter 370/432 | Loss: nan | OA: 0.9473 | mIoU: 0.4736 | Time: 5.63s
+  Iter 380/432 | Loss: nan | OA: 0.8936 | mIoU: 0.4468 | Time: 5.76s
+  Iter 390/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.77s
+  Iter 400/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.64s
+  Iter 410/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.76s
+  Iter 420/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.76s
+  Iter 430/432 | Loss: nan | OA: 0.9622 | mIoU: 0.4811 | Time: 5.64s
+Validating...
+  Val OA: 96.17% | Fire F1: 0.00% | Fire IoU: 0.00% | mIoU: 48.08%
+
+--- Epoch 2/5 ---
+  Iter 10/432 | Loss: nan | OA: 0.8689 | mIoU: 0.4344 | Time: 5.54s
+  Iter 20/432 | Loss: nan | OA: 0.9535 | mIoU: 0.4768 | Time: 5.67s
+  Iter 30/432 | Loss: nan | OA: 0.9473 | mIoU: 0.4736 | Time: 5.53s
+  Iter 40/432 | Loss: nan | OA: 0.9964 | mIoU: 0.4982 | Time: 5.54s
+  Iter 50/432 | Loss: nan | OA: 0.9942 | mIoU: 0.4971 | Time: 5.66s
+  Iter 60/432 | Loss: nan | OA: 0.9841 | mIoU: 0.4921 | Time: 5.53s
+  Iter 70/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.49s
+  Iter 80/432 | Loss: nan | OA: 0.9296 | mIoU: 0.4648 | Time: 5.63s
+  Iter 90/432 | Loss: nan | OA: 0.9076 | mIoU: 0.4538 | Time: 5.67s
+  Iter 100/432 | Loss: nan | OA: 0.9610 | mIoU: 0.4805 | Time: 5.52s
+  Iter 110/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.65s
+  Iter 120/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.76s
+  Iter 130/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.53s
+  Iter 140/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.67s
+  Iter 150/432 | Loss: nan | OA: 0.9450 | mIoU: 0.4725 | Time: 6.32s
+  Iter 160/432 | Loss: nan | OA: 0.9539 | mIoU: 0.4770 | Time: 5.52s
+  Iter 170/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.67s
+  Iter 180/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.68s
+  Iter 190/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.55s
+  Iter 200/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.70s
+  Iter 210/432 | Loss: nan | OA: 0.9997 | mIoU: 0.4998 | Time: 5.67s
+  Iter 220/432 | Loss: nan | OA: 0.9227 | mIoU: 0.4614 | Time: 5.51s
+  Iter 230/432 | Loss: nan | OA: 0.5601 | mIoU: 0.2800 | Time: 5.63s
+  Iter 240/432 | Loss: nan | OA: 0.9309 | mIoU: 0.4655 | Time: 5.66s
+  Iter 250/432 | Loss: nan | OA: 0.8933 | mIoU: 0.4466 | Time: 5.49s
+  Iter 260/432 | Loss: nan | OA: 0.9019 | mIoU: 0.4510 | Time: 5.64s
+  Iter 270/432 | Loss: nan | OA: 0.8722 | mIoU: 0.4361 | Time: 5.63s
+  Iter 280/432 | Loss: nan | OA: 0.9664 | mIoU: 0.4832 | Time: 5.50s
+  Iter 290/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.61s
+  Iter 300/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.63s
+  Iter 310/432 | Loss: nan | OA: 0.9176 | mIoU: 0.4588 | Time: 5.52s
+  Iter 320/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.66s
+  Iter 330/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.61s
+  Iter 340/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.51s
+  Iter 350/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.59s
+  Iter 360/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.62s
+  Iter 370/432 | Loss: nan | OA: 0.8935 | mIoU: 0.4467 | Time: 5.49s
+  Iter 380/432 | Loss: nan | OA: 0.9946 | mIoU: 0.4973 | Time: 5.62s
+  Iter 390/432 | Loss: nan | OA: 0.9427 | mIoU: 0.4714 | Time: 5.63s
+  Iter 400/432 | Loss: nan | OA: 0.9658 | mIoU: 0.4829 | Time: 5.52s
+  Iter 410/432 | Loss: nan | OA: 0.9555 | mIoU: 0.4778 | Time: 5.63s
+  Iter 420/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.62s
+  Iter 430/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.45s
+Validating...
+  Val OA: 96.17% | Fire F1: 0.00% | Fire IoU: 0.00% | mIoU: 48.08%
+
+--- Epoch 3/5 ---
+  Iter 10/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.61s
+  Iter 20/432 | Loss: nan | OA: 0.9860 | mIoU: 0.4930 | Time: 5.60s
+  Iter 30/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.71s
+  Iter 40/432 | Loss: nan | OA: 0.8751 | mIoU: 0.4375 | Time: 5.59s
+  Iter 50/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.62s
+  Iter 60/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.71s
+  Iter 70/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.72s
+  Iter 80/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.62s
+  Iter 90/432 | Loss: nan | OA: 0.9556 | mIoU: 0.4778 | Time: 5.73s
+  Iter 100/432 | Loss: nan | OA: 0.9549 | mIoU: 0.4775 | Time: 5.58s
+  Iter 110/432 | Loss: nan | OA: 0.9450 | mIoU: 0.4725 | Time: 5.59s
+  Iter 120/432 | Loss: nan | OA: 0.9481 | mIoU: 0.4741 | Time: 5.72s
+  Iter 130/432 | Loss: nan | OA: 0.9349 | mIoU: 0.4674 | Time: 5.58s
+  Iter 140/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.60s
+  Iter 150/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.71s
+  Iter 160/432 | Loss: nan | OA: 0.8434 | mIoU: 0.4217 | Time: 5.59s
+  Iter 170/432 | Loss: nan | OA: 0.8930 | mIoU: 0.4465 | Time: 5.60s
+  Iter 180/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.72s
+  Iter 190/432 | Loss: nan | OA: 0.9589 | mIoU: 0.4795 | Time: 5.74s
+  Iter 200/432 | Loss: nan | OA: 0.9998 | mIoU: 0.4999 | Time: 5.61s
+  Iter 210/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.71s
+  Iter 220/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.58s
+  Iter 230/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.59s
+  Iter 240/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.71s
+  Iter 250/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.60s
+  Iter 260/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.62s
+  Iter 270/432 | Loss: nan | OA: 0.9802 | mIoU: 0.4901 | Time: 5.71s
+  Iter 280/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.58s
+  Iter 290/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.59s
+  Iter 300/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.72s
+  Iter 310/432 | Loss: nan | OA: 0.9945 | mIoU: 0.4973 | Time: 5.58s
+  Iter 320/432 | Loss: nan | OA: 0.9503 | mIoU: 0.4751 | Time: 5.61s
+  Iter 330/432 | Loss: nan | OA: 0.8881 | mIoU: 0.4440 | Time: 5.72s
+  Iter 340/432 | Loss: nan | OA: 0.9395 | mIoU: 0.4697 | Time: 5.58s
+  Iter 350/432 | Loss: nan | OA: 0.9896 | mIoU: 0.4948 | Time: 5.60s
+  Iter 360/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.72s
+  Iter 370/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.58s
+  Iter 380/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.60s
+  Iter 390/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.76s
+  Iter 400/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.59s
+  Iter 410/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.61s
+  Iter 420/432 | Loss: nan | OA: 0.8972 | mIoU: 0.4486 | Time: 5.69s
+  Iter 430/432 | Loss: nan | OA: 0.9256 | mIoU: 0.4628 | Time: 5.63s
+Validating...
+  Val OA: 96.17% | Fire F1: 0.00% | Fire IoU: 0.00% | mIoU: 48.08%
+
+--- Epoch 4/5 ---
+  Iter 10/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.63s
+  Iter 20/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.63s
+  Iter 30/432 | Loss: nan | OA: 0.8997 | mIoU: 0.4499 | Time: 5.75s
+  Iter 40/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.64s
+  Iter 50/432 | Loss: nan | OA: 0.9753 | mIoU: 0.4876 | Time: 5.63s
+  Iter 60/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.78s
+  Iter 70/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.64s
+  Iter 80/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.63s
+  Iter 90/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.75s
+  Iter 100/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.64s
+  Iter 110/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.64s
+  Iter 120/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.76s
+  Iter 130/432 | Loss: nan | OA: 0.9086 | mIoU: 0.4543 | Time: 5.67s
+  Iter 140/432 | Loss: nan | OA: 0.8097 | mIoU: 0.4048 | Time: 5.64s
+  Iter 150/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.75s
+  Iter 160/432 | Loss: nan | OA: 0.9869 | mIoU: 0.4935 | Time: 5.66s
+  Iter 170/432 | Loss: nan | OA: 0.9458 | mIoU: 0.4729 | Time: 5.65s
+  Iter 180/432 | Loss: nan | OA: 0.9473 | mIoU: 0.4736 | Time: 5.76s
+  Iter 190/432 | Loss: nan | OA: 0.9836 | mIoU: 0.4918 | Time: 5.66s
+  Iter 200/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.65s
+  Iter 210/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.76s
+  Iter 220/432 | Loss: nan | OA: 0.9802 | mIoU: 0.4901 | Time: 5.64s
+  Iter 230/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.66s
+  Iter 240/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.78s
+  Iter 250/432 | Loss: nan | OA: 0.8751 | mIoU: 0.4375 | Time: 5.64s
+  Iter 260/432 | Loss: nan | OA: 0.9439 | mIoU: 0.4720 | Time: 5.64s
+  Iter 270/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.80s
+  Iter 280/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.65s
+  Iter 290/432 | Loss: nan | OA: 0.9374 | mIoU: 0.4687 | Time: 5.63s
+  Iter 300/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.77s
+  Iter 310/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.64s
+  Iter 320/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.64s
+  Iter 330/432 | Loss: nan | OA: 0.8414 | mIoU: 0.4207 | Time: 5.81s
+  Iter 340/432 | Loss: nan | OA: 0.9807 | mIoU: 0.4903 | Time: 5.65s
+  Iter 350/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.64s
+  Iter 360/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.79s
+  Iter 370/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.64s
+  Iter 380/432 | Loss: nan | OA: 0.7219 | mIoU: 0.3610 | Time: 5.64s
+  Iter 390/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.81s
+  Iter 400/432 | Loss: nan | OA: 0.9568 | mIoU: 0.4784 | Time: 5.66s
+  Iter 410/432 | Loss: nan | OA: 0.9968 | mIoU: 0.4984 | Time: 5.65s
+  Iter 420/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.77s
+  Iter 430/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.63s
+Validating...
+  Val OA: 96.17% | Fire F1: 0.00% | Fire IoU: 0.00% | mIoU: 48.08%
+
+--- Epoch 5/5 ---
+  Iter 10/432 | Loss: nan | OA: 0.9763 | mIoU: 0.4882 | Time: 5.56s
+  Iter 20/432 | Loss: nan | OA: 0.9268 | mIoU: 0.4634 | Time: 5.57s
+  Iter 30/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.70s
+  Iter 40/432 | Loss: nan | OA: 0.9968 | mIoU: 0.4984 | Time: 5.59s
+  Iter 50/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.59s
+  Iter 60/432 | Loss: nan | OA: 0.8056 | mIoU: 0.4028 | Time: 5.71s
+  Iter 70/432 | Loss: nan | OA: 0.8709 | mIoU: 0.4354 | Time: 5.61s
+  Iter 80/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.59s
+  Iter 90/432 | Loss: nan | OA: 0.9974 | mIoU: 0.4987 | Time: 5.72s
+  Iter 100/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 6.03s
+  Iter 110/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.60s
+  Iter 120/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.74s
+  Iter 130/432 | Loss: nan | OA: 0.9679 | mIoU: 0.4839 | Time: 5.57s
+  Iter 140/432 | Loss: nan | OA: 0.8467 | mIoU: 0.4234 | Time: 5.56s
+  Iter 150/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.71s
+  Iter 160/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.61s
+  Iter 170/432 | Loss: nan | OA: 0.8457 | mIoU: 0.4229 | Time: 5.56s
+  Iter 180/432 | Loss: nan | OA: 0.9850 | mIoU: 0.4925 | Time: 5.72s
+  Iter 190/432 | Loss: nan | OA: 0.7093 | mIoU: 0.3546 | Time: 5.60s
+  Iter 200/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.60s
+  Iter 210/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.71s
+  Iter 220/432 | Loss: nan | OA: 0.7456 | mIoU: 0.3728 | Time: 5.61s
+  Iter 230/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.59s
+  Iter 240/432 | Loss: nan | OA: 0.9420 | mIoU: 0.4710 | Time: 5.74s
+  Iter 250/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 6.33s
+  Iter 260/432 | Loss: nan | OA: 0.9610 | mIoU: 0.4805 | Time: 5.58s
+  Iter 270/432 | Loss: nan | OA: 0.9663 | mIoU: 0.4832 | Time: 5.71s
+  Iter 280/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.59s
+  Iter 290/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.62s
+  Iter 300/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.70s
+  Iter 310/432 | Loss: nan | OA: 0.9852 | mIoU: 0.4926 | Time: 5.56s
+  Iter 320/432 | Loss: nan | OA: 0.9499 | mIoU: 0.4749 | Time: 5.57s
+  Iter 330/432 | Loss: nan | OA: 0.9943 | mIoU: 0.4971 | Time: 5.71s
+  Iter 340/432 | Loss: nan | OA: 0.8952 | mIoU: 0.4476 | Time: 5.57s
+  Iter 350/432 | Loss: nan | OA: 0.9887 | mIoU: 0.4943 | Time: 5.61s
+  Iter 360/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.68s
+  Iter 370/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.56s
+  Iter 380/432 | Loss: nan | OA: 0.9963 | mIoU: 0.4981 | Time: 5.57s
+  Iter 390/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.70s
+  Iter 400/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.59s
+  Iter 410/432 | Loss: nan | OA: 0.9843 | mIoU: 0.4921 | Time: 5.63s
+  Iter 420/432 | Loss: nan | OA: 1.0000 | mIoU: 0.5000 | Time: 5.71s
+  Iter 430/432 | Loss: nan | OA: 0.9540 | mIoU: 0.4770 | Time: 5.58s
+Validating...
+  Val OA: 96.17% | Fire F1: 0.00% | Fire IoU: 0.00% | mIoU: 48.08%
+
+Testing...
+  Test OA: 95.74% | Fire P: 0.00% | Fire R: 0.00% | Fire F1: 0.00% | Fire IoU: 0.00% | mIoU: 47.87%
+
+Done. Results saved to experiments/quantum_fpn_random_split_0428_0319

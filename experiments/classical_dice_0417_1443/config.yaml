@@ -1,0 +1,30 @@
+# Classical U-Net with Dice + CE Loss (SWIR + aerosol, mode 5)
+
+model: classical_unet
+mode: 5                    # swir_aerosol
+n_classes: 2
+
+# Training
+augment: false
+epochs: 20
+batch_size: 16
+test_batch_size: 50
+val_batch_size: 1
+learning_rate: 1.0e-4
+weight_decay: 5.0e-4
+seed: 1234
+
+# Loss
+loss: dice_loss
+fire_class_weight: 10   # per-class alpha weight for fire class in CE component
+dice_smooth: 1.0        # Laplace smoothing for Dice numerator/denominator
+
+# Data
+data_dir: /home/vkota/scratch.hpcintro-shared/datasets/Sen2Fire
+train_list: ./dataset/train.txt
+val_list: ./dataset/val.txt
+test_list: ./dataset/test.txt
+
+# Output
+experiment_name: classical_dice
+

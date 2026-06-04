@@ -1,0 +1,73 @@
+Config: classical_cabuar_full
+Model: classical_unet | Mode: 4 (swir) | Augment: False
+Output: experiments/classical_cabuar_full_0426_1657
+Train: 21 batches | Val: 109 | Test: 2
+
+--- Epoch 1/10 ---
+  Iter 10/21 | Loss: 0.4561 | OA: 0.7323 | mIoU: 0.4333 | Time: 0.17s
+  Iter 20/21 | Loss: 0.2596 | OA: 0.8560 | mIoU: 0.5506 | Time: 0.17s
+Validating...
+  Val OA: 90.86% | Fire F1: 0.03% | Fire IoU: 0.02% | mIoU: 45.44%
+  New best model! Saving checkpoint...
+
+--- Epoch 2/10 ---
+  Iter 10/21 | Loss: 0.2977 | OA: 0.8953 | mIoU: 0.5604 | Time: 0.17s
+  Iter 20/21 | Loss: 0.3017 | OA: 0.8945 | mIoU: 0.6216 | Time: 0.17s
+Validating...
+  Val OA: 90.86% | Fire F1: 0.00% | Fire IoU: 0.00% | mIoU: 45.43%
+
+--- Epoch 3/10 ---
+  Iter 10/21 | Loss: 0.2935 | OA: 0.9350 | mIoU: 0.6996 | Time: 0.17s
+  Iter 20/21 | Loss: 0.2412 | OA: 0.9064 | mIoU: 0.6290 | Time: 0.17s
+Validating...
+  Val OA: 93.89% | Fire F1: 60.04% | Fire IoU: 42.90% | mIoU: 68.25%
+  New best model! Saving checkpoint...
+
+--- Epoch 4/10 ---
+  Iter 10/21 | Loss: 0.2989 | OA: 0.9002 | mIoU: 0.5921 | Time: 0.16s
+  Iter 20/21 | Loss: 0.2220 | OA: 0.9332 | mIoU: 0.5862 | Time: 0.16s
+Validating...
+  Val OA: 94.15% | Fire F1: 74.93% | Fire IoU: 59.90% | mIoU: 76.75%
+  New best model! Saving checkpoint...
+
+--- Epoch 5/10 ---
+  Iter 10/21 | Loss: 0.3156 | OA: 0.8654 | mIoU: 0.5779 | Time: 0.16s
+  Iter 20/21 | Loss: 0.2731 | OA: 0.8606 | mIoU: 0.5323 | Time: 0.17s
+Validating...
+  Val OA: 86.94% | Fire F1: 58.03% | Fire IoU: 40.87% | mIoU: 63.26%
+
+--- Epoch 6/10 ---
+  Iter 10/21 | Loss: 0.4353 | OA: 0.7670 | mIoU: 0.5193 | Time: 0.16s
+  Iter 20/21 | Loss: 0.2370 | OA: 0.9154 | mIoU: 0.6219 | Time: 0.16s
+Validating...
+  Val OA: 94.78% | Fire F1: 76.85% | Fire IoU: 62.41% | mIoU: 78.35%
+  New best model! Saving checkpoint...
+
+--- Epoch 7/10 ---
+  Iter 10/21 | Loss: 0.2814 | OA: 0.8755 | mIoU: 0.5782 | Time: 0.17s
+  Iter 20/21 | Loss: 0.3985 | OA: 0.8190 | mIoU: 0.5849 | Time: 0.16s
+Validating...
+  Val OA: 88.22% | Fire F1: 59.64% | Fire IoU: 42.49% | mIoU: 64.79%
+
+--- Epoch 8/10 ---
+  Iter 10/21 | Loss: 0.3015 | OA: 0.9186 | mIoU: 0.6167 | Time: 0.16s
+  Iter 20/21 | Loss: 0.2368 | OA: 0.9480 | mIoU: 0.6653 | Time: 0.16s
+Validating...
+  Val OA: 94.11% | Fire F1: 75.15% | Fire IoU: 60.19% | mIoU: 76.87%
+
+--- Epoch 9/10 ---
+  Iter 10/21 | Loss: 0.2140 | OA: 0.9321 | mIoU: 0.5794 | Time: 0.16s
+  Iter 20/21 | Loss: 0.1663 | OA: 0.9432 | mIoU: 0.6056 | Time: 0.16s
+Validating...
+  Val OA: 94.79% | Fire F1: 75.76% | Fire IoU: 60.98% | mIoU: 77.65%
+
+--- Epoch 10/10 ---
+  Iter 10/21 | Loss: 0.1698 | OA: 0.9482 | mIoU: 0.6854 | Time: 0.16s
+  Iter 20/21 | Loss: 0.1874 | OA: 0.9041 | mIoU: 0.6739 | Time: 0.16s
+Validating...
+  Val OA: 93.53% | Fire F1: 73.34% | Fire IoU: 57.91% | mIoU: 75.40%
+
+Testing...
+  Test OA: 95.05% | Fire P: 50.97% | Fire R: 95.34% | Fire F1: 66.42% | Fire IoU: 49.73% | mIoU: 72.26%
+
+Done. Results saved to experiments/classical_cabuar_full_0426_1657

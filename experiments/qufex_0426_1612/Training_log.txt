@@ -1,0 +1,11 @@
+Config: qufex
+Model: qufex_unet | Mode: 5 (swir_aerosol)
+Output: experiments/qufex_0426_1612
+Train: 92 batches | Val: 504 | Test: 11
+
+--- Epoch 1/25 ---
+  Iter 10/92 | Loss: 0.5583 | OA: 0.8789 | mIoU: 0.4394 | Time: 1.65s
+  Iter 20/92 | Loss: 0.4687 | OA: 0.9454 | mIoU: 0.4741 | Time: 1.67s
+  Iter 30/92 | Loss: 0.5115 | OA: 0.8922 | mIoU: 0.4489 | Time: 1.68s
+  Iter 40/92 | Loss: 0.4576 | OA: 0.9685 | mIoU: 0.4843 | Time: 1.65s
+  Iter 50/92 | Loss: 0.4470 | OA: 0.8905 | mIoU: 0.4452 | Time: 1.69s

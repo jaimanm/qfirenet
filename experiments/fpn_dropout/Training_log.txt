@@ -1,0 +1,77 @@
+Config: fpn_unet_baseline
+Model: fpn_unet | Mode: 5 (swir_aerosol)
+Output: experiments/fpn_unet_baseline_0418_2234
+Train: 92 batches | Val: 504 | Test: 32
+
+--- Epoch 1/5 ---
+  Iter 10/92 | Loss: 0.6094 | OA: 0.8425 | mIoU: 0.4223 | Time: 1.19s
+  Iter 20/92 | Loss: 0.3549 | OA: 0.9741 | mIoU: 0.4908 | Time: 1.19s
+  Iter 30/92 | Loss: 0.3466 | OA: 0.9067 | mIoU: 0.4562 | Time: 1.19s
+  Iter 40/92 | Loss: 0.3099 | OA: 0.9903 | mIoU: 0.4951 | Time: 1.19s
+  Iter 50/92 | Loss: 0.2189 | OA: 0.8965 | mIoU: 0.4483 | Time: 1.19s
+  Iter 60/92 | Loss: 0.2501 | OA: 0.9811 | mIoU: 0.4998 | Time: 1.19s
+  Iter 70/92 | Loss: 0.1437 | OA: 0.9971 | mIoU: 0.4986 | Time: 1.19s
+  Iter 80/92 | Loss: 0.1151 | OA: 0.9816 | mIoU: 0.4908 | Time: 1.18s
+  Iter 90/92 | Loss: 0.1974 | OA: 0.9471 | mIoU: 0.4735 | Time: 1.19s
+Validating...
+  Val OA: 96.42% | Fire F1: 37.94% | Fire IoU: 23.41% | mIoU: 59.89%
+  New best model! Saving checkpoint...
+
+--- Epoch 2/5 ---
+  Iter 10/92 | Loss: 1.1720 | OA: 0.9120 | mIoU: 0.4793 | Time: 1.20s
+  Iter 20/92 | Loss: 0.3142 | OA: 0.9642 | mIoU: 0.4969 | Time: 1.19s
+  Iter 30/92 | Loss: 0.3165 | OA: 0.9892 | mIoU: 0.4946 | Time: 1.20s
+  Iter 40/92 | Loss: 0.3948 | OA: 0.9476 | mIoU: 0.4798 | Time: 1.18s
+  Iter 50/92 | Loss: 0.2496 | OA: 0.9877 | mIoU: 0.4938 | Time: 1.19s
+  Iter 60/92 | Loss: 0.7723 | OA: 0.9158 | mIoU: 0.4579 | Time: 1.19s
+  Iter 70/92 | Loss: 0.3000 | OA: 0.9152 | mIoU: 0.4660 | Time: 1.19s
+  Iter 80/92 | Loss: 0.1555 | OA: 0.9893 | mIoU: 0.5030 | Time: 1.19s
+  Iter 90/92 | Loss: 0.1165 | OA: 0.9978 | mIoU: 0.4989 | Time: 1.20s
+Validating...
+  Val OA: 95.84% | Fire F1: 39.19% | Fire IoU: 24.37% | mIoU: 60.08%
+  New best model! Saving checkpoint...
+
+--- Epoch 3/5 ---
+  Iter 10/92 | Loss: 0.1136 | OA: 0.9955 | mIoU: 0.5134 | Time: 1.19s
+  Iter 20/92 | Loss: 0.5443 | OA: 0.9052 | mIoU: 0.4768 | Time: 1.18s
+  Iter 30/92 | Loss: 0.5033 | OA: 0.9627 | mIoU: 0.4814 | Time: 1.19s
+  Iter 40/92 | Loss: 0.3650 | OA: 0.9804 | mIoU: 0.5011 | Time: 1.19s
+  Iter 50/92 | Loss: 0.3238 | OA: 0.9839 | mIoU: 0.4919 | Time: 1.19s
+  Iter 60/92 | Loss: 0.1795 | OA: 0.9801 | mIoU: 0.4918 | Time: 1.19s
+  Iter 70/92 | Loss: 0.2553 | OA: 0.9841 | mIoU: 0.4946 | Time: 1.19s
+  Iter 80/92 | Loss: 0.0847 | OA: 0.9956 | mIoU: 0.4978 | Time: 1.19s
+  Iter 90/92 | Loss: 0.2755 | OA: 0.9878 | mIoU: 0.5013 | Time: 1.19s
+Validating...
+  Val OA: 95.08% | Fire F1: 40.51% | Fire IoU: 25.40% | mIoU: 60.20%
+  New best model! Saving checkpoint...
+
+--- Epoch 4/5 ---
+  Iter 10/92 | Loss: 0.3291 | OA: 0.9755 | mIoU: 0.5032 | Time: 1.19s
+  Iter 20/92 | Loss: 0.4676 | OA: 0.9220 | mIoU: 0.4671 | Time: 1.19s
+  Iter 30/92 | Loss: 0.1841 | OA: 0.9089 | mIoU: 0.4545 | Time: 1.18s
+  Iter 40/92 | Loss: 0.6172 | OA: 0.9356 | mIoU: 0.4678 | Time: 1.19s
+  Iter 50/92 | Loss: 0.2601 | OA: 0.9216 | mIoU: 0.4610 | Time: 1.19s
+  Iter 60/92 | Loss: 0.2985 | OA: 0.9618 | mIoU: 0.4939 | Time: 1.19s
+  Iter 70/92 | Loss: 0.1704 | OA: 1.0000 | mIoU: 0.5000 | Time: 1.19s
+  Iter 80/92 | Loss: 0.3585 | OA: 0.9837 | mIoU: 0.4919 | Time: 1.17s
+  Iter 90/92 | Loss: 0.2594 | OA: 0.9687 | mIoU: 0.4905 | Time: 1.18s
+Validating...
+  Val OA: 79.05% | Fire F1: 19.64% | Fire IoU: 10.89% | mIoU: 44.69%
+
+--- Epoch 5/5 ---
+  Iter 10/92 | Loss: 0.5049 | OA: 0.9641 | mIoU: 0.4985 | Time: 1.19s
+  Iter 20/92 | Loss: 0.5916 | OA: 0.9676 | mIoU: 0.4838 | Time: 1.19s
+  Iter 30/92 | Loss: 0.3516 | OA: 0.9564 | mIoU: 0.4962 | Time: 1.19s
+  Iter 40/92 | Loss: 0.3336 | OA: 0.8901 | mIoU: 0.4451 | Time: 1.19s
+  Iter 50/92 | Loss: 0.5203 | OA: 0.9377 | mIoU: 0.4688 | Time: 1.19s
+  Iter 60/92 | Loss: 0.4226 | OA: 0.9313 | mIoU: 0.4926 | Time: 1.19s
+  Iter 70/92 | Loss: 0.5419 | OA: 0.9649 | mIoU: 0.4963 | Time: 1.19s
+  Iter 80/92 | Loss: 0.4633 | OA: 0.9158 | mIoU: 0.4663 | Time: 1.18s
+  Iter 90/92 | Loss: 0.1690 | OA: 0.9639 | mIoU: 0.4877 | Time: 1.19s
+Validating...
+  Val OA: 81.71% | Fire F1: 21.08% | Fire IoU: 11.78% | mIoU: 46.51%
+
+Testing...
+  Test OA: 93.25% | Fire P: 36.54% | Fire R: 22.84% | Fire F1: 28.11% | Fire IoU: 16.35% | mIoU: 54.76%
+
+Done. Results saved to experiments/fpn_unet_baseline_0418_2234

@@ -1,0 +1,75 @@
+Config: qufex
+Model: qufex_unet | Mode: 5 (swir_aerosol)
+Output: experiments/qufex_0405_0246
+Train: 92 batches | Val: 504 | Test: 11
+
+--- Epoch 1/5 ---
+  Iter 10/92 | Loss: 0.4659 | OA: 0.9484 | mIoU: 0.4821 | Time: 1.93s
+  Iter 20/92 | Loss: 0.4899 | OA: 0.9643 | mIoU: 0.4878 | Time: 1.92s
+  Iter 30/92 | Loss: 0.4128 | OA: 0.9430 | mIoU: 0.4715 | Time: 1.92s
+  Iter 40/92 | Loss: 0.5475 | OA: 0.8809 | mIoU: 0.4405 | Time: 1.92s
+  Iter 50/92 | Loss: 0.4965 | OA: 0.8711 | mIoU: 0.4355 | Time: 2.00s
+  Iter 60/92 | Loss: 0.3881 | OA: 0.9681 | mIoU: 0.4898 | Time: 1.94s
+  Iter 70/92 | Loss: 0.4020 | OA: 0.9824 | mIoU: 0.4912 | Time: 1.90s
+  Iter 80/92 | Loss: 0.5390 | OA: 0.9191 | mIoU: 0.4684 | Time: 1.90s
+  Iter 90/92 | Loss: 0.4602 | OA: 0.9548 | mIoU: 0.4837 | Time: 1.91s
+Validating...
+  Val OA: 96.20% | Fire F1: 30.30% | Fire IoU: 17.85% | mIoU: 57.01%
+  New best model! Saving checkpoint...
+
+--- Epoch 2/5 ---
+  Iter 10/92 | Loss: 0.1714 | OA: 0.9953 | mIoU: 0.4977 | Time: 1.81s
+  Iter 20/92 | Loss: 0.7995 | OA: 0.9519 | mIoU: 0.4760 | Time: 1.85s
+  Iter 30/92 | Loss: 0.2656 | OA: 0.9979 | mIoU: 0.4989 | Time: 1.82s
+  Iter 40/92 | Loss: 0.2664 | OA: 0.9340 | mIoU: 0.4674 | Time: 1.83s
+  Iter 50/92 | Loss: 0.5074 | OA: 0.8527 | mIoU: 0.4277 | Time: 1.83s
+  Iter 60/92 | Loss: 0.2586 | OA: 0.9889 | mIoU: 0.4944 | Time: 1.84s
+  Iter 70/92 | Loss: 0.9932 | OA: 0.8884 | mIoU: 0.4442 | Time: 1.83s
+  Iter 80/92 | Loss: 0.6319 | OA: 0.9489 | mIoU: 0.4869 | Time: 1.85s
+  Iter 90/92 | Loss: 0.1949 | OA: 0.9998 | mIoU: 0.4999 | Time: 1.83s
+Validating...
+  Val OA: 96.44% | Fire F1: 0.39% | Fire IoU: 0.19% | mIoU: 48.31%
+
+--- Epoch 3/5 ---
+  Iter 10/92 | Loss: 0.6012 | OA: 0.9313 | mIoU: 0.4658 | Time: 1.80s
+  Iter 20/92 | Loss: 0.1967 | OA: 0.9303 | mIoU: 0.4651 | Time: 1.84s
+  Iter 30/92 | Loss: 0.2447 | OA: 0.9888 | mIoU: 0.4945 | Time: 1.85s
+  Iter 40/92 | Loss: 0.2003 | OA: 0.9991 | mIoU: 0.4997 | Time: 1.73s
+  Iter 50/92 | Loss: 0.5790 | OA: 0.9752 | mIoU: 0.4878 | Time: 1.84s
+  Iter 60/92 | Loss: 0.1923 | OA: 0.9985 | mIoU: 0.4992 | Time: 1.86s
+  Iter 70/92 | Loss: 0.8203 | OA: 0.8581 | mIoU: 0.4294 | Time: 1.85s
+  Iter 80/92 | Loss: 0.7461 | OA: 0.7807 | mIoU: 0.3913 | Time: 1.86s
+  Iter 90/92 | Loss: 0.6218 | OA: 0.9608 | mIoU: 0.4806 | Time: 1.84s
+Validating...
+  Val OA: 96.44% | Fire F1: 1.48% | Fire IoU: 0.75% | mIoU: 48.59%
+
+--- Epoch 4/5 ---
+  Iter 10/92 | Loss: 0.4530 | OA: 0.9399 | mIoU: 0.4701 | Time: 1.84s
+  Iter 20/92 | Loss: 0.6058 | OA: 0.9583 | mIoU: 0.4799 | Time: 1.87s
+  Iter 30/92 | Loss: 0.2200 | OA: 0.9925 | mIoU: 0.4964 | Time: 1.79s
+  Iter 40/92 | Loss: 0.4490 | OA: 0.9780 | mIoU: 0.4902 | Time: 1.86s
+  Iter 50/92 | Loss: 0.8775 | OA: 0.9398 | mIoU: 0.4700 | Time: 1.88s
+  Iter 60/92 | Loss: 0.2113 | OA: 0.9916 | mIoU: 0.4958 | Time: 1.85s
+  Iter 70/92 | Loss: 0.2268 | OA: 0.9976 | mIoU: 0.4989 | Time: 1.87s
+  Iter 80/92 | Loss: 0.5102 | OA: 0.9754 | mIoU: 0.4877 | Time: 1.87s
+  Iter 90/92 | Loss: 0.3548 | OA: 0.9860 | mIoU: 0.4933 | Time: 1.84s
+Validating...
+  Val OA: 96.37% | Fire F1: 10.79% | Fire IoU: 5.70% | mIoU: 51.03%
+
+--- Epoch 5/5 ---
+  Iter 10/92 | Loss: 0.5881 | OA: 0.9299 | mIoU: 0.4664 | Time: 1.83s
+  Iter 20/92 | Loss: 0.3475 | OA: 0.9644 | mIoU: 0.4822 | Time: 1.86s
+  Iter 30/92 | Loss: 0.2218 | OA: 0.9864 | mIoU: 0.4932 | Time: 1.87s
+  Iter 40/92 | Loss: 0.4094 | OA: 0.9706 | mIoU: 0.4966 | Time: 1.86s
+  Iter 50/92 | Loss: 0.3449 | OA: 0.8450 | mIoU: 0.4225 | Time: 1.89s
+  Iter 60/92 | Loss: 0.2294 | OA: 0.9906 | mIoU: 0.5050 | Time: 1.89s
+  Iter 70/92 | Loss: 0.3260 | OA: 0.9834 | mIoU: 0.4959 | Time: 1.85s
+  Iter 80/92 | Loss: 0.5412 | OA: 0.9502 | mIoU: 0.4831 | Time: 1.86s
+  Iter 90/92 | Loss: 0.5123 | OA: 0.9658 | mIoU: 0.4829 | Time: 1.86s
+Validating...
+  Val OA: 96.45% | Fire F1: 0.75% | Fire IoU: 0.38% | mIoU: 48.41%
+
+Testing...
+  Test OA: 93.71% | Fire P: 36.66% | Fire R: 12.18% | Fire F1: 18.29% | Fire IoU: 10.06% | mIoU: 51.86%
+
+Done. Results saved to experiments/qufex_0405_0246

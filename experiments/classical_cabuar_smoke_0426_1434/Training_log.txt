@@ -1,0 +1,30 @@
+Config: classical_cabuar_smoke
+Model: classical_unet | Mode: 4 (swir) | Augment: False
+Output: experiments/classical_cabuar_smoke_0426_1434
+Train: 167 batches | Val: 109 | Test: 2
+
+--- Epoch 1/1 ---
+  Iter 10/167 | Loss: 0.4192 | OA: 0.6167 | mIoU: 0.4044 | Time: 0.02s
+  Iter 20/167 | Loss: 0.4218 | OA: 0.6394 | mIoU: 0.4514 | Time: 0.02s
+  Iter 30/167 | Loss: 0.4817 | OA: 0.8565 | mIoU: 0.5795 | Time: 0.02s
+  Iter 40/167 | Loss: 0.6366 | OA: 0.6839 | mIoU: 0.3491 | Time: 0.02s
+  Iter 50/167 | Loss: 0.6019 | OA: 0.7984 | mIoU: 0.4327 | Time: 0.02s
+  Iter 60/167 | Loss: 0.3590 | OA: 0.9652 | mIoU: 0.6685 | Time: 0.02s
+  Iter 70/167 | Loss: 0.4526 | OA: 0.9691 | mIoU: 0.5160 | Time: 0.02s
+  Iter 80/167 | Loss: 0.3307 | OA: 0.9430 | mIoU: 0.7120 | Time: 0.02s
+  Iter 90/167 | Loss: 0.3884 | OA: 0.9438 | mIoU: 0.6572 | Time: 0.02s
+  Iter 100/167 | Loss: 0.5572 | OA: 0.8684 | mIoU: 0.5465 | Time: 0.02s
+  Iter 110/167 | Loss: 0.3591 | OA: 0.9470 | mIoU: 0.8568 | Time: 0.02s
+  Iter 120/167 | Loss: 0.5325 | OA: 0.7248 | mIoU: 0.3711 | Time: 0.02s
+  Iter 130/167 | Loss: 0.5878 | OA: 0.7096 | mIoU: 0.3616 | Time: 0.02s
+  Iter 140/167 | Loss: 0.4521 | OA: 0.7847 | mIoU: 0.4565 | Time: 0.02s
+  Iter 150/167 | Loss: 0.4573 | OA: 0.8561 | mIoU: 0.5657 | Time: 0.02s
+  Iter 160/167 | Loss: 0.5971 | OA: 0.8262 | mIoU: 0.5316 | Time: 0.02s
+Validating...
+  Val OA: 83.08% | Fire F1: 51.06% | Fire IoU: 34.28% | mIoU: 57.86%
+  New best model! Saving checkpoint...
+
+Testing...
+  Test OA: 87.06% | Fire P: 27.75% | Fire R: 94.88% | Fire F1: 42.94% | Fire IoU: 27.34% | mIoU: 56.87%
+
+Done. Results saved to experiments/classical_cabuar_smoke_0426_1434

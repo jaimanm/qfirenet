@@ -1,0 +1,47 @@
+# FPN U-Net spectral ablation, extended run
+#
+# Spectral ablation (mode 4, SWIR only) outperformed aerosol augmentation
+# (25.35% vs 18.03% Test Fire F1). This config runs the same setup with:
+#
+#   - More epochs: the best checkpoint came from epoch 1 of the 5-epoch run,
+#     meaning the model never had a chance to improve past its initial peak.
+#     15 epochs gives it room to converge properly.
+#
+#   - Reduced augmentation: mixup+cutmix at 0.3+0.3 = 60% augmented batches
+#     caused training instability (val Fire F1 oscillating 21-32%). Dropping
+#     to 0.1+0.1 leaves 80% of batches clean, reducing gradient noise while
+#     still providing regularization.
+
+model: fpn_unet
+mode: 5
+n_classes: 2
+
+# Training
+epochs: 15
+batch_size: 8
+test_batch_size: 8
+val_batch_size: 1
+learning_rate: 1.0e-4
+weight_decay: 5.0e-4
+seed: 1234
+
+# Loss
+loss: cross_entropy
+fire_class_weight: 10
+
+# FPN
+fpn_out_channels: 128
+
+# Augmentation
+mixup: 0.1
+cutmix: 0.1
+mix_alpha: 0.2
+
+# Data
+data_dir: ../Sen2Fire/
+train_list: ./dataset/train.txt
+val_list: ./dataset/val.txt
+test_list: ./dataset/test.txt
+
+# Output
+experiment_name: fpn_ablation_extended
