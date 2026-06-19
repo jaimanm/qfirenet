@@ -3,10 +3,10 @@
 *.pt
 
 # Experiment outputs (large binary/image files)
-experiments/**/*.png
-experiments/**/*.npz
-experiments/**/slurm-*.out
-experiments/slurm-*.out
+# experiments/**/*.png
+# experiments/**/*.npz
+# experiments/**/slurm-*.out
+# experiments/slurm-*.out
 
 # Python
 __pycache__/
