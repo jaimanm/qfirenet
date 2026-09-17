@@ -112,7 +112,6 @@ def get_data_loaders(config, log=None):
 
     common['num_workers'] = n_workers
 
-<<<<<<< HEAD
     if config.get('random_split', False):
         # --- Patch-level random split across all scenes ---
         seed = config.get('seed', 1234)
