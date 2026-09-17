@@ -6,6 +6,7 @@ from models.qufex_model import QuNet
 from models.qbnet_model import QBNet
 from models.fpn_unet import FPNUNet
 from models.quantum_fpn_unet import QuantumFPNUNet
+from models.qbnet_fpn import QBNetFPN
 
 MODEL_REGISTRY = {
     'classical_unet': ClassicalUNet,
@@ -16,6 +17,7 @@ MODEL_REGISTRY = {
     'qbnet_unet': QBNet,
     'fpn_unet': FPNUNet,
     'quantum_fpn_unet': QuantumFPNUNet,
+    'qbnet_fpn': QBNetFPN,
 }
 
 # Spectral band mode -> number of input channels
