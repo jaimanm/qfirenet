@@ -321,8 +321,7 @@ def train(config):
         if val_metrics['class1_F1'] > F1_best:
             F1_best = val_metrics['class1_F1']
             log("  New best model! Saving checkpoint...")
-            exp_name = os.path.basename(os.path.normpath(exp_dir))
-            torch.save(model.state_dict(), os.path.join(exp_dir, f'{exp_name}_best_model.pth'))
+            torch.save(model.state_dict(), os.path.join(exp_dir, 'best_model.pth'))
 
     # Test
     log("\nTesting...")
