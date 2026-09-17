@@ -190,6 +190,8 @@ class _InMemoryDataSet(Sen2FireDataSet):
         self.root = root
         self.list_path = '<in-memory>'
         self.mode = mode
+        self.augment = False              # random-split path does not augment here
+        self._fire_presence_flags = None  # lazily populated by get_fire_presence_flags()
         self.img_ids = [line.strip() for line in list_io if line.strip()]
         self.files = [
             {'patch': os.path.join(self.root, name), 'name': name}
