@@ -1,0 +1,6 @@
+Config: qufex_fpn_random_split
+Model: qufex_fpn | Mode: 4 (swir) | Augment: False
+Output: experiments/qufex_fpn_random_split_0917_1324
+Train: 108 batches | Val: 369 | Test: 24
+
+--- Epoch 1/15 ---
