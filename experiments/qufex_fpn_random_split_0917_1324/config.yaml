@@ -1,0 +1,57 @@
+# QuFeX FPN-UNet — patch-level random split
+#
+# QuFeXBottleneck (Jain & Kalev 2025 — U1/U2 angle embedding + CZ ring) inserted
+# between the U-Net encoder and an FPN decoder. Directly parallel to qbnet_fpn;
+# the only difference is the quantum circuit.
+#
+# Quantum setup matches qufex.yaml exactly (Qu-Net 8(1): 8 qubits, 1 layer,
+# qufex_circuit, LR 5e-5). The FPN decoder + data setup match qbnet_fpn.yaml so
+# QBNet-FPN and QuFeX-FPN are comparable on the same host.
+#
+# NOTE: learning_rate is 5.0e-5 (QuFeX's tuned value), NOT the 1.0e-4 used by
+# qbnet_fpn — so this follows the "exact QuFeX setup" rather than matching
+# QBNet-FPN's optimizer. Change to 1.0e-4 if you want a fully matched LR.
+#
+# Runtime note:
+#   QuFeXBottleneck evaluates the circuit per spatial location, so each forward
+#   runs B·H·W circuits (batch_size · 32 · 32 at the bottleneck).
+
+model: qufex_fpn
+mode: 4                          # swir (SWIR-only, 3 channels — matches qbnet_fpn)
+n_classes: 2
+
+# Quantum bottleneck (exact QuFeX setup from qufex.yaml — Qu-Net 8(1))
+n_qubits: 8                      # 8 qubits (must be even for the U1/U2 split)
+n_layers: 1                      # 1 trainable rotation layer inside QuFeX
+circuit: qufex_circuit
+
+# Training
+epochs: 15
+batch_size: 16                   # matches qbnet_fpn
+test_batch_size: 16
+val_batch_size: 1
+learning_rate: 5.0e-5            # QuFeX's tuned LR (qufex.yaml), not qbnet_fpn's 1e-4
+weight_decay: 5.0e-4
+seed: 1234
+
+# Loss
+loss: cross_entropy
+fire_class_weight: 10
+
+# FPN
+fpn_out_channels: 128            # matches qbnet_fpn / fpn_random_split
+
+# Data
+data_dir: ../Sen2Fire/
+train_list: ./dataset/train.txt
+val_list:   ./dataset/val.txt
+test_list:  ./dataset/test.txt
+
+# Random patch-level split (same as qbnet_fpn for fair comparison)
+# Pools all 2466 patches from scenes 1-4, shuffles with seed, then 70/15/15.
+random_split: true
+random_split_train_ratio: 0.70
+random_split_val_ratio:   0.15
+
+# Output
+experiment_name: qufex_fpn_random_split
