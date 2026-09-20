@@ -57,6 +57,10 @@ class QBNetFPN(nn.Module):
         n_qubits = config.get('n_qubits', 4)
         n_layers = config.get('n_layers', 2)
         fpn_channels = config.get('fpn_out_channels', 256)
+        # When False, the encoder skip connections (laterals l1-l4) are severed
+        # so the decoder can only reconstruct from the quantum bottleneck (l5).
+        # Used by the *-noskip ablations to measure bottleneck reliance.
+        self.use_skip = config.get('skip_connections', True)
         factor = 2 if bilinear else 1
 
         # ── Encoder (identical to ClassicalUNet / FPNUNet) ────────────────
@@ -80,11 +84,14 @@ class QBNetFPN(nn.Module):
         )
 
         # ── FPN lateral connections (one per encoder stage) ───────────────
+        # lat5 (the quantum bottleneck) is always built; lat1-lat4 (the encoder
+        # skip connections) are only built when use_skip is True.
         self.lat5 = LateralBlock(1024 // factor, fpn_channels)
-        self.lat4 = LateralBlock(512,            fpn_channels)
-        self.lat3 = LateralBlock(256,            fpn_channels)
-        self.lat2 = LateralBlock(128,            fpn_channels)
-        self.lat1 = LateralBlock(64,             fpn_channels)
+        if self.use_skip:
+            self.lat4 = LateralBlock(512,            fpn_channels)
+            self.lat3 = LateralBlock(256,            fpn_channels)
+            self.lat2 = LateralBlock(128,            fpn_channels)
+            self.lat1 = LateralBlock(64,             fpn_channels)
 
         # ── Smoothing convs (applied after top-down addition) ─────────────
         self.smooth5 = SmoothBlock(fpn_channels)
@@ -98,11 +105,14 @@ class QBNetFPN(nn.Module):
 
     # ── Helpers ───────────────────────────────────────────────────────────
 
-    def _upsample_add(self, top_down, lateral):
-        """Upsample top-down feature map to lateral's spatial size and add."""
-        return F.interpolate(
-            top_down, size=lateral.shape[-2:], mode='bilinear', align_corners=True
-        ) + lateral
+    def _upsample_add(self, top_down, size, lateral=None):
+        """Upsample top-down feature map to `size` and add the lateral connection.
+
+        When `lateral` is None (skip connections disabled), only the upsampled
+        top-down feature map is returned.
+        """
+        up = F.interpolate(top_down, size=size, mode='bilinear', align_corners=True)
+        return up if lateral is None else up + lateral
 
     # ── Forward pass ──────────────────────────────────────────────────────
 
@@ -119,18 +129,21 @@ class QBNetFPN(nn.Module):
         x5 = self.qbnet_bottleneck(x5)  # [B, 512, 32, 32]
 
         # ── FPN lateral projections ───────────────────────────────────────
-        l5 = self.lat5(x5)   # [B, fpn_ch, 32,  32 ]
-        l4 = self.lat4(x4)   # [B, fpn_ch, 64,  64 ]
-        l3 = self.lat3(x3)   # [B, fpn_ch, 128, 128]
-        l2 = self.lat2(x2)   # [B, fpn_ch, 256, 256]
-        l1 = self.lat1(x1)   # [B, fpn_ch, 512, 512]
+        l5 = self.lat5(x5)                       # [B, fpn_ch, 32, 32] bottleneck
+        if self.use_skip:
+            l4 = self.lat4(x4)   # [B, fpn_ch, 64,  64 ]
+            l3 = self.lat3(x3)   # [B, fpn_ch, 128, 128]
+            l2 = self.lat2(x2)   # [B, fpn_ch, 256, 256]
+            l1 = self.lat1(x1)   # [B, fpn_ch, 512, 512]
+        else:
+            l4 = l3 = l2 = l1 = None             # skip connections severed
 
         # ── Top-down pathway ──────────────────────────────────────────────
         p5 = self.smooth5(l5)
-        p4 = self.smooth4(self._upsample_add(p5, l4))
-        p3 = self.smooth3(self._upsample_add(p4, l3))
-        p2 = self.smooth2(self._upsample_add(p3, l2))
-        p1 = self.smooth1(self._upsample_add(p2, l1))
+        p4 = self.smooth4(self._upsample_add(p5, x4.shape[-2:], l4))
+        p3 = self.smooth3(self._upsample_add(p4, x3.shape[-2:], l3))
+        p2 = self.smooth2(self._upsample_add(p3, x2.shape[-2:], l2))
+        p1 = self.smooth1(self._upsample_add(p2, x1.shape[-2:], l1))
 
         # ── Fuse all pyramid levels at full (P1) resolution ───────────────
         target = p1.shape[-2:]
