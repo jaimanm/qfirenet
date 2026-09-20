@@ -1,0 +1,59 @@
+# QB-Net FPN-UNet — patch-level random split
+#
+# QBNetBottleneck (Xu, Zhao & Li 2025 — RY + U3 + CNOT ladder) inserted between
+# the U-Net encoder and an FPN decoder. Combines the known-working QB-Net
+# bottleneck with the multi-scale FPN decoder.
+#
+# Designed for apples-to-apples comparison against:
+#   - fpn_random_split  (same encoder + FPN decoder, NO quantum bottleneck; Test Fire F1 39.76%)
+#   - qbnet             (same QB-Net bottleneck, plain U-Net decoder instead of FPN)
+# Shares fpn_random_split's data setup (mode 4 / SWIR-only, 70/15/15 patch split,
+# same seed) but runs without mixup/cutmix and uses qbnet's batch size (16) over
+# 15 epochs. The key differences vs the baselines are the quantum bottleneck and
+# the FPN decoder width.
+#
+# Runtime note:
+#   QBNetBottleneck evaluates the circuit per spatial location, so each forward
+#   runs B·H·W circuits (batch_size · 32 · 32 at the bottleneck). Expect the
+#   quantum bottleneck to dominate runtime vs the classical FPN — increase
+#   --time in submit_train.sh accordingly.
+
+model: qbnet_fpn
+mode: 4                          # swir (SWIR-only, 3 channels — matches fpn_random_split)
+n_classes: 2
+
+# Quantum bottleneck
+n_qubits: 4                      # matching qbnet.yaml for a controlled comparison
+n_layers: 2                      # trainable U3 layers inside QB-Net
+circuit: qbnet_circuit
+
+# Training
+epochs: 15
+batch_size: 16                   # matches qbnet
+test_batch_size: 16
+val_batch_size: 1
+learning_rate: 1.0e-4
+weight_decay: 5.0e-4
+seed: 1234
+
+# Loss
+loss: cross_entropy
+fire_class_weight: 10
+
+# FPN
+fpn_out_channels: 128            # matches fpn_random_split for fair comparison
+
+# Data
+data_dir: ../Sen2Fire/
+train_list: ./dataset/train.txt
+val_list:   ./dataset/val.txt
+test_list:  ./dataset/test.txt
+
+# Random patch-level split (same as fpn_random_split for fair comparison)
+# Pools all 2466 patches from scenes 1-4, shuffles with seed, then 70/15/15.
+random_split: true
+random_split_train_ratio: 0.70
+random_split_val_ratio:   0.15
+
+# Output
+experiment_name: qbnet_fpn_random_split
