@@ -1,0 +1,61 @@
+# QuFeX FPN-UNet — no-skip ablation
+#
+# Identical to qufex_fpn.yaml but with the encoder skip connections (FPN
+# laterals l1-l4) severed via `skip_connections: false`. Only the quantum
+# bottleneck lateral (l5, from the QuFeX-processed x5) feeds the top-down
+# decoder, so the decoder must reconstruct the full-resolution segmentation
+# from the quantum bottleneck alone.
+#
+# Purpose: compared against qufex_fpn (skips ON), this isolates how much the
+# QuFeX bottleneck is actually contributing. Directly parallel to
+# qbnet_fpn_noskip; the only difference is the quantum circuit.
+#
+# NOTE: keeps QuFeX's tuned LR of 5e-5 (matching qufex_fpn.yaml) so this is a
+# clean skip-connection ablation of the already-run qufex_fpn experiment. Use
+# qufex_fpn_control if you instead want FPN-matched training hyperparameters.
+#
+# Runtime note:
+#   QuFeXBottleneck evaluates the circuit per spatial location, so each forward
+#   runs B·H·W circuits (batch_size · 32 · 32 at the bottleneck).
+
+model: qufex_fpn
+mode: 4                          # swir (SWIR-only, 3 channels — matches qufex_fpn)
+n_classes: 2
+
+# Ablation: sever encoder skip connections (laterals l1-l4); keep bottleneck l5
+skip_connections: false
+
+# Quantum bottleneck (exact QuFeX setup from qufex.yaml — Qu-Net 8(1))
+n_qubits: 8                      # 8 qubits (must be even for the U1/U2 split)
+n_layers: 1                      # 1 trainable rotation layer inside QuFeX
+circuit: qufex_circuit
+
+# Training
+epochs: 35
+batch_size: 16                   # matches qufex_fpn
+test_batch_size: 16
+val_batch_size: 1
+learning_rate: 5.0e-5            # QuFeX's tuned LR (matches qufex_fpn.yaml)
+weight_decay: 5.0e-4
+seed: 1234
+
+# Loss
+loss: cross_entropy
+fire_class_weight: 10
+
+# FPN
+fpn_out_channels: 128            # matches qufex_fpn
+
+# Data
+data_dir: ../Sen2Fire/
+train_list: ./dataset/train.txt
+val_list:   ./dataset/val.txt
+test_list:  ./dataset/test.txt
+
+# Random patch-level split (same as qufex_fpn for fair comparison)
+random_split: true
+random_split_train_ratio: 0.70
+random_split_val_ratio:   0.15
+
+# Output
+experiment_name: qufex_fpn_noskip

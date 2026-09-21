@@ -1,0 +1,61 @@
+# QB-Net FPN-UNet — FPN-matched control
+#
+# Controlled variant of qbnet_fpn that replicates fpn_random_split's training
+# recipe as closely as possible while keeping the batch size of 16 required by
+# the quantum bottleneck's runtime.
+#
+# vs qbnet_fpn.yaml, this ADDS the mixup/cutmix augmentation that
+# fpn_random_split uses (and that qbnet_fpn drops), so the ONLY differences
+# from the classical FPN baseline are the quantum bottleneck and batch size:
+#   fpn_random_split : batch 8,  mixup 0.1 / cutmix 0.1,  LR 1e-4,  no quantum
+#   qbnet_fpn_control: batch 16, mixup 0.1 / cutmix 0.1,  LR 1e-4,  QB-Net bottleneck
+#
+# Runtime note:
+#   QBNetBottleneck evaluates the circuit per spatial location, so each forward
+#   runs B·H·W circuits (batch_size · 32 · 32 at the bottleneck). Increase
+#   --time in submit_train.sh accordingly.
+
+model: qbnet_fpn
+mode: 4                          # swir (SWIR-only, 3 channels — matches fpn_random_split)
+n_classes: 2
+
+# Quantum bottleneck (same as qbnet_fpn)
+n_qubits: 4                      # matching qbnet.yaml for a controlled comparison
+n_layers: 2                      # trainable U3 layers inside QB-Net
+circuit: qbnet_circuit
+
+# Training
+epochs: 35
+batch_size: 16                   # quantum-runtime batch size (control variable)
+test_batch_size: 16
+val_batch_size: 1
+learning_rate: 1.0e-4            # matches fpn_random_split
+weight_decay: 5.0e-4
+seed: 1234
+
+# Loss
+loss: cross_entropy
+fire_class_weight: 10
+
+# FPN
+fpn_out_channels: 128            # matches fpn_random_split
+
+# Augmentation (matches fpn_random_split — this is the key control addition)
+mixup: 0.1
+cutmix: 0.1
+mix_alpha: 0.2
+
+# Data
+data_dir: ../Sen2Fire/
+train_list: ./dataset/train.txt
+val_list:   ./dataset/val.txt
+test_list:  ./dataset/test.txt
+
+# Random patch-level split (same as fpn_random_split for fair comparison)
+# Pools all 2466 patches from scenes 1-4, shuffles with seed, then 70/15/15.
+random_split: true
+random_split_train_ratio: 0.70
+random_split_val_ratio:   0.15
+
+# Output
+experiment_name: qbnet_fpn_control

@@ -49,6 +49,10 @@ class FPNUNet(nn.Module):
         self.bilinear = bilinear
 
         fpn_channels = config.get('fpn_out_channels', 256) if config else 256
+        # When False, the encoder skip connections (laterals l1-l4) are severed
+        # so the decoder can only reconstruct from the bottleneck (l5). Used by
+        # the *-noskip ablations to measure how much the model relies on skips.
+        self.use_skip = config.get('skip_connections', True) if config else True
         factor = 2 if bilinear else 1
 
         # ── Encoder (identical to ClassicalUNet) ──────────────────────────
@@ -57,17 +61,20 @@ class FPNUNet(nn.Module):
         self.down2 = Down(128, 256)
         self.down3 = Down(256, 512)
         self.down4 = Down(512, 1024 // factor)
-        
+
         # ── Regularization (Bottleneck Dropout) ───────────────────────────
         self.dropout = nn.Dropout2d(p=0.5)
 
         # ── FPN lateral connections (one per encoder stage) ───────────────
-        # Each lateral squashes the encoder's channel dim to fpn_channels
+        # Each lateral squashes the encoder's channel dim to fpn_channels.
+        # lat5 (the bottleneck) is always built; lat1-lat4 (the encoder skip
+        # connections) are only built when use_skip is True.
         self.lat5 = LateralBlock(1024 // factor, fpn_channels)
-        self.lat4 = LateralBlock(512,            fpn_channels)
-        self.lat3 = LateralBlock(256,            fpn_channels)
-        self.lat2 = LateralBlock(128,            fpn_channels)
-        self.lat1 = LateralBlock(64,             fpn_channels)
+        if self.use_skip:
+            self.lat4 = LateralBlock(512,            fpn_channels)
+            self.lat3 = LateralBlock(256,            fpn_channels)
+            self.lat2 = LateralBlock(128,            fpn_channels)
+            self.lat1 = LateralBlock(64,             fpn_channels)
 
         # ── Smoothing convs (applied after top-down addition) ─────────────
         self.smooth5 = SmoothBlock(fpn_channels)
@@ -81,11 +88,14 @@ class FPNUNet(nn.Module):
         # then a final 1x1 conv produces per-pixel class scores.
         self.outc = OutConv(fpn_channels, n_classes)
 
-    def _upsample_add(self, top_down, lateral):
-        """Upsample top-down feature map and add to lateral connection."""
-        return F.interpolate(
-            top_down, size=lateral.shape[-2:], mode='bilinear', align_corners=True
-        ) + lateral
+    def _upsample_add(self, top_down, size, lateral=None):
+        """Upsample top-down feature map to `size` and add the lateral connection.
+
+        When `lateral` is None (skip connections disabled), only the upsampled
+        top-down feature map is returned.
+        """
+        up = F.interpolate(top_down, size=size, mode='bilinear', align_corners=True)
+        return up if lateral is None else up + lateral
 
     def forward(self, x):
         # ── Encoder: same forward pass as ClassicalUNet ───────────────────
@@ -97,18 +107,18 @@ class FPNUNet(nn.Module):
         x5 = self.dropout(x5)   # Drop out 50% of the deepest features
 
         # ── Lateral projections ───────────────────────────────────────────
-        l5 = self.lat5(x5)
-        l4 = self.lat4(x4)
-        l3 = self.lat3(x3)
-        l2 = self.lat2(x2)
-        l1 = self.lat1(x1)
+        l5 = self.lat5(x5)                       # bottleneck (always present)
+        if self.use_skip:
+            l4, l3, l2, l1 = self.lat4(x4), self.lat3(x3), self.lat2(x2), self.lat1(x1)
+        else:
+            l4 = l3 = l2 = l1 = None             # skip connections severed
 
         # ── Top-down pathway ──────────────────────────────────────────────
         p5 = self.smooth5(l5)
-        p4 = self.smooth4(self._upsample_add(p5, l4))
-        p3 = self.smooth3(self._upsample_add(p4, l3))
-        p2 = self.smooth2(self._upsample_add(p3, l2))
-        p1 = self.smooth1(self._upsample_add(p2, l1))
+        p4 = self.smooth4(self._upsample_add(p5, x4.shape[-2:], l4))
+        p3 = self.smooth3(self._upsample_add(p4, x3.shape[-2:], l3))
+        p2 = self.smooth2(self._upsample_add(p3, x2.shape[-2:], l2))
+        p1 = self.smooth1(self._upsample_add(p2, x1.shape[-2:], l1))
 
         # ── Fuse all pyramid levels at full resolution ────────────────────
         target = p1.shape[-2:]
