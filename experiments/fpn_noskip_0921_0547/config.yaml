@@ -1,0 +1,52 @@
+# FPN U-Net — no-skip ablation
+#
+# Identical to fpn_random_split.yaml but with the encoder skip connections
+# (FPN laterals l1-l4) severed via `skip_connections: false`. Only the
+# bottleneck lateral (l5, from x5) feeds the top-down decoder, so the decoder
+# must reconstruct the full-resolution segmentation from the bottleneck alone.
+#
+# Purpose: compared against fpn_random_split (skips ON), this measures how much
+# the FPN relies on encoder skip connections vs the bottleneck. Serves as the
+# classical reference for qbnet_fpn_noskip / qufex_fpn_noskip.
+
+model: fpn_unet
+mode: 4
+n_classes: 2
+
+# Ablation: sever encoder skip connections (laterals l1-l4); keep bottleneck l5
+skip_connections: false
+
+# Training
+epochs: 5                        # short smoke run to validate the no-skip path
+batch_size: 16
+test_batch_size: 16
+val_batch_size: 1
+learning_rate: 1.0e-4
+weight_decay: 5.0e-4
+seed: 1234
+
+# Loss
+loss: cross_entropy
+fire_class_weight: 10
+
+# FPN
+fpn_out_channels: 128
+
+# Augmentation
+mixup: 0.1
+cutmix: 0.1
+mix_alpha: 0.2
+
+# Data
+data_dir: ../Sen2Fire/
+train_list: ./dataset/train.txt
+val_list:   ./dataset/val.txt
+test_list:  ./dataset/test.txt
+
+# Random patch-level split (matches fpn_random_split for fair comparison)
+random_split: true
+random_split_train_ratio: 0.70
+random_split_val_ratio:   0.15
+
+# Output
+experiment_name: fpn_noskip

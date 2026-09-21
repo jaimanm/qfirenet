@@ -1,0 +1,82 @@
+Config: fpn_noskip
+Model: fpn_unet | Mode: 4 (swir) | Augment: False
+Output: experiments/fpn_noskip_0921_0547
+Train: 108 batches | Val: 369 | Test: 24
+
+--- Epoch 1/5 ---
+  Iter 10/108 | Loss: 0.8961 | OA: 0.0832 | mIoU: 0.0440 | Time: 0.16s
+  Iter 20/108 | Loss: 0.5117 | OA: 0.9465 | mIoU: 0.4781 | Time: 0.16s
+  Iter 30/108 | Loss: 0.6701 | OA: 0.9577 | mIoU: 0.4836 | Time: 0.16s
+  Iter 40/108 | Loss: 0.6992 | OA: 0.9110 | mIoU: 0.4635 | Time: 0.16s
+  Iter 50/108 | Loss: 0.5174 | OA: 0.9667 | mIoU: 0.4937 | Time: 0.16s
+  Iter 60/108 | Loss: 0.4743 | OA: 0.8665 | mIoU: 0.4408 | Time: 0.16s
+  Iter 70/108 | Loss: 0.3562 | OA: 0.9559 | mIoU: 0.4821 | Time: 0.16s
+  Iter 80/108 | Loss: 0.4207 | OA: 0.9163 | mIoU: 0.4635 | Time: 0.16s
+  Iter 90/108 | Loss: 0.2853 | OA: 0.9547 | mIoU: 0.4859 | Time: 0.16s
+  Iter 100/108 | Loss: 0.3054 | OA: 0.9281 | mIoU: 0.4685 | Time: 0.16s
+Validating...
+  Val OA: 92.25% | Fire F1: 26.57% | Fire IoU: 15.32% | mIoU: 53.73%
+  New best model! Saving checkpoint...
+
+--- Epoch 2/5 ---
+  Iter 10/108 | Loss: 0.2344 | OA: 0.9773 | mIoU: 0.4893 | Time: 0.16s
+  Iter 20/108 | Loss: 0.7604 | OA: 0.9337 | mIoU: 0.4739 | Time: 0.16s
+  Iter 30/108 | Loss: 0.2689 | OA: 0.9686 | mIoU: 0.4927 | Time: 0.16s
+  Iter 40/108 | Loss: 0.5275 | OA: 0.9505 | mIoU: 0.4792 | Time: 0.17s
+  Iter 50/108 | Loss: 0.5258 | OA: 0.9639 | mIoU: 0.4879 | Time: 0.17s
+  Iter 60/108 | Loss: 0.3237 | OA: 0.9260 | mIoU: 0.4790 | Time: 0.17s
+  Iter 70/108 | Loss: 0.4519 | OA: 0.8831 | mIoU: 0.4418 | Time: 0.17s
+  Iter 80/108 | Loss: 0.3911 | OA: 0.9299 | mIoU: 0.4721 | Time: 0.16s
+  Iter 90/108 | Loss: 0.1896 | OA: 0.9865 | mIoU: 0.5057 | Time: 0.17s
+  Iter 100/108 | Loss: 0.6007 | OA: 0.9245 | mIoU: 0.4937 | Time: 0.16s
+Validating...
+  Val OA: 95.98% | Fire F1: 30.99% | Fire IoU: 18.33% | mIoU: 57.14%
+  New best model! Saving checkpoint...
+
+--- Epoch 3/5 ---
+  Iter 10/108 | Loss: 0.2367 | OA: 0.9546 | mIoU: 0.4867 | Time: 0.15s
+  Iter 20/108 | Loss: 0.7736 | OA: 0.9374 | mIoU: 0.4687 | Time: 0.15s
+  Iter 30/108 | Loss: 0.3164 | OA: 0.9855 | mIoU: 0.5050 | Time: 0.16s
+  Iter 40/108 | Loss: 0.2398 | OA: 0.9868 | mIoU: 0.5058 | Time: 0.16s
+  Iter 50/108 | Loss: 0.5709 | OA: 0.9580 | mIoU: 0.4886 | Time: 0.16s
+  Iter 60/108 | Loss: 0.9137 | OA: 0.9253 | mIoU: 0.4627 | Time: 0.16s
+  Iter 70/108 | Loss: 0.2113 | OA: 0.9815 | mIoU: 0.4908 | Time: 0.16s
+  Iter 80/108 | Loss: 0.5763 | OA: 0.9154 | mIoU: 0.4760 | Time: 0.16s
+  Iter 90/108 | Loss: 0.4424 | OA: 0.9431 | mIoU: 0.4873 | Time: 0.16s
+  Iter 100/108 | Loss: 0.8141 | OA: 0.8993 | mIoU: 0.4623 | Time: 0.16s
+Validating...
+  Val OA: 90.66% | Fire F1: 27.42% | Fire IoU: 15.89% | mIoU: 53.19%
+
+--- Epoch 4/5 ---
+  Iter 10/108 | Loss: 0.2199 | OA: 0.9425 | mIoU: 0.4747 | Time: 0.17s
+  Iter 20/108 | Loss: 0.6050 | OA: 0.9366 | mIoU: 0.4919 | Time: 0.16s
+  Iter 30/108 | Loss: 0.3384 | OA: 0.9109 | mIoU: 0.4626 | Time: 0.16s
+  Iter 40/108 | Loss: 0.9573 | OA: 0.8773 | mIoU: 0.4513 | Time: 0.16s
+  Iter 50/108 | Loss: 0.3198 | OA: 0.9263 | mIoU: 0.4716 | Time: 0.16s
+  Iter 60/108 | Loss: 0.1493 | OA: 0.9850 | mIoU: 0.4925 | Time: 0.17s
+  Iter 70/108 | Loss: 0.5155 | OA: 0.9513 | mIoU: 0.5043 | Time: 0.16s
+  Iter 80/108 | Loss: 0.6670 | OA: 0.9413 | mIoU: 0.4795 | Time: 0.16s
+  Iter 90/108 | Loss: 0.5946 | OA: 0.9466 | mIoU: 0.4939 | Time: 0.16s
+  Iter 100/108 | Loss: 0.5228 | OA: 0.9508 | mIoU: 0.4886 | Time: 0.16s
+Validating...
+  Val OA: 95.55% | Fire F1: 39.00% | Fire IoU: 24.22% | mIoU: 59.86%
+  New best model! Saving checkpoint...
+
+--- Epoch 5/5 ---
+  Iter 10/108 | Loss: 0.5563 | OA: 0.9413 | mIoU: 0.4781 | Time: 0.15s
+  Iter 20/108 | Loss: 0.1258 | OA: 0.9966 | mIoU: 0.4983 | Time: 0.15s
+  Iter 30/108 | Loss: 0.4236 | OA: 0.9730 | mIoU: 0.4978 | Time: 0.16s
+  Iter 40/108 | Loss: 0.2578 | OA: 0.9777 | mIoU: 0.5022 | Time: 0.16s
+  Iter 50/108 | Loss: 0.4041 | OA: 0.9608 | mIoU: 0.4862 | Time: 0.16s
+  Iter 60/108 | Loss: 0.2014 | OA: 0.9805 | mIoU: 0.4992 | Time: 0.16s
+  Iter 70/108 | Loss: 0.3320 | OA: 0.9789 | mIoU: 0.4896 | Time: 0.16s
+  Iter 80/108 | Loss: 0.5252 | OA: 0.9048 | mIoU: 0.4633 | Time: 0.17s
+  Iter 90/108 | Loss: 0.3670 | OA: 0.9723 | mIoU: 0.4959 | Time: 0.16s
+  Iter 100/108 | Loss: 0.3558 | OA: 0.9422 | mIoU: 0.4869 | Time: 0.16s
+Validating...
+  Val OA: 95.38% | Fire F1: 26.68% | Fire IoU: 15.39% | mIoU: 55.37%
+
+Testing...
+  Test OA: 94.83% | Fire P: 36.25% | Fire R: 27.89% | Fire F1: 31.52% | Fire IoU: 18.71% | mIoU: 56.74%
+
+Done. Results saved to experiments/fpn_noskip_0921_0547
