@@ -17,7 +17,7 @@ n_classes: 2
 skip_connections: false
 
 # Training
-epochs: 5                        # short smoke run to validate the no-skip path
+epochs: 35
 batch_size: 16
 test_batch_size: 16
 val_batch_size: 1
