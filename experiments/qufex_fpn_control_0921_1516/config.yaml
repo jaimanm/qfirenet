@@ -1,0 +1,65 @@
+# QuFeX FPN-UNet — FPN-matched control
+#
+# Controlled variant of qufex_fpn that replicates fpn_random_split's training
+# recipe as closely as possible while keeping the batch size of 16 required by
+# the quantum bottleneck's runtime.
+#
+# vs qufex_fpn.yaml, this makes TWO changes to match the classical FPN baseline:
+#   1. ADDS the mixup/cutmix augmentation fpn_random_split uses (qufex_fpn drops it)
+#   2. Uses LR 1e-4 (fpn_random_split's value) instead of QuFeX's tuned 5e-5
+# so the ONLY differences from the classical FPN baseline are the quantum
+# bottleneck and batch size:
+#   fpn_random_split : batch 8,  mixup 0.1 / cutmix 0.1,  LR 1e-4,  no quantum
+#   qufex_fpn_control: batch 16, mixup 0.1 / cutmix 0.1,  LR 1e-4,  QuFeX bottleneck
+#
+# NOTE: this trades QuFeX's tuned LR for FPN's LR on purpose — the goal here is
+# an FPN-matched control, not the "exact QuFeX setup" of qufex_fpn.yaml.
+#
+# Runtime note:
+#   QuFeXBottleneck evaluates the circuit per spatial location, so each forward
+#   runs B·H·W circuits (batch_size · 32 · 32 at the bottleneck).
+
+model: qufex_fpn
+mode: 4                          # swir (SWIR-only, 3 channels — matches fpn_random_split)
+n_classes: 2
+
+# Quantum bottleneck (exact QuFeX setup from qufex.yaml — Qu-Net 8(1))
+n_qubits: 8                      # 8 qubits (must be even for the U1/U2 split)
+n_layers: 1                      # 1 trainable rotation layer inside QuFeX
+circuit: qufex_circuit
+
+# Training
+epochs: 35
+batch_size: 16                   # quantum-runtime batch size (control variable)
+test_batch_size: 16
+val_batch_size: 1
+learning_rate: 1.0e-4            # matches fpn_random_split (NOT QuFeX's 5e-5)
+weight_decay: 5.0e-4
+seed: 1234
+
+# Loss
+loss: cross_entropy
+fire_class_weight: 10
+
+# FPN
+fpn_out_channels: 128            # matches fpn_random_split
+
+# Augmentation (matches fpn_random_split — this is a key control addition)
+mixup: 0.1
+cutmix: 0.1
+mix_alpha: 0.2
+
+# Data
+data_dir: ../Sen2Fire/
+train_list: ./dataset/train.txt
+val_list:   ./dataset/val.txt
+test_list:  ./dataset/test.txt
+
+# Random patch-level split (same as fpn_random_split for fair comparison)
+# Pools all 2466 patches from scenes 1-4, shuffles with seed, then 70/15/15.
+random_split: true
+random_split_train_ratio: 0.70
+random_split_val_ratio:   0.15
+
+# Output
+experiment_name: qufex_fpn_control
