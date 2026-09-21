@@ -1,0 +1,46 @@
+# FPN U-Net — 35-epoch control
+#
+# Identical to fpn_random_split.yaml but trained for 35 epochs instead of 15
+# and at batch size 16, matching qbnet_fpn_control / qufex_fpn_control. Serves
+# as the classical reference for the control set: same FPN training recipe
+# (mixup/cutmix, LR 1e-4, batch 16), so the quantum bottleneck is the ONLY
+# difference from the quantum controls.
+
+model: fpn_unet
+mode: 4
+n_classes: 2
+
+# Training
+epochs: 35
+batch_size: 16
+test_batch_size: 16
+val_batch_size: 1
+learning_rate: 1.0e-4
+weight_decay: 5.0e-4
+seed: 1234
+
+# Loss
+loss: cross_entropy
+fire_class_weight: 10
+
+# FPN
+fpn_out_channels: 128
+
+# Augmentation
+mixup: 0.1
+cutmix: 0.1
+mix_alpha: 0.2
+
+# Data
+data_dir: ../Sen2Fire/
+train_list: ./dataset/train.txt
+val_list:   ./dataset/val.txt
+test_list:  ./dataset/test.txt
+
+# Random patch-level split (matches fpn_random_split for fair comparison)
+random_split: true
+random_split_train_ratio: 0.70
+random_split_val_ratio:   0.15
+
+# Output
+experiment_name: fpn_control
